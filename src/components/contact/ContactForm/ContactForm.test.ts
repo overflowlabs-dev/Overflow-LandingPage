@@ -32,13 +32,17 @@ function buildContactFormHtml(opts: MountContactFormOptions = {}): string {
 		<form id="contact-form" novalidate>
 			<input type="hidden" name="access_key" value="${accessKey}" />
 			<label for="contact-name">Nome</label>
-			<input id="contact-name" name="name" type="text" value="${name}" />
+			<p id="contact-name-error" class="hidden" role="alert" aria-live="polite"></p>
+			<input id="contact-name" name="name" type="text" value="${name}" aria-describedby="contact-name-error" />
 			<label for="contact-phone">Telefone (WhatsApp)</label>
-			<input id="contact-phone" name="phone" type="tel" value="${phone}" />
+			<p id="contact-phone-error" class="hidden" role="alert" aria-live="polite"></p>
+			<input id="contact-phone" name="phone" type="tel" value="${phone}" aria-describedby="contact-phone-error" />
 			<label for="contact-email">E-mail</label>
-			<input id="contact-email" name="email" type="email" value="${email}" />
+			<p id="contact-email-error" class="hidden" role="alert" aria-live="polite"></p>
+			<input id="contact-email" name="email" type="email" value="${email}" aria-describedby="contact-email-error" />
 			<label for="contact-message">O que você precisa desenvolver ou automatizar?</label>
-			<textarea id="contact-message" name="message">${message}</textarea>
+			<p id="contact-message-error" class="hidden" role="alert" aria-live="polite"></p>
+			<textarea id="contact-message" name="message" aria-describedby="contact-message-error">${message}</textarea>
 			<button type="submit">Receber diagnóstico gratuito</button>
 			${captchaBlock}
 			<p id="form-status" class="hidden" role="status" aria-live="polite"></p>
@@ -91,9 +95,10 @@ describe('ContactForm', () => {
 
 		await user.click(screen.getByRole('button', { name: /receber diagnóstico gratuito/i }))
 
-		const status = screen.getByRole('status')
-		expect(status).toHaveAttribute('aria-live', 'polite')
-		expect(status).toHaveTextContent('Informe um nome.')
+		const nameError = document.getElementById('contact-name-error')
+		expect(nameError).toBeTruthy()
+		expect(nameError).toHaveTextContent('Informe um nome.')
+		expect(screen.getByRole('status')).toHaveTextContent('')
 	})
 
 	it('should exigir captcha antes do envio', async () => {
@@ -130,7 +135,7 @@ describe('ContactForm', () => {
 
 		await user.click(screen.getByRole('button', { name: /receber diagnóstico gratuito/i }))
 
-		expect(screen.getByRole('status')).toHaveTextContent(
+		expect(document.getElementById('contact-email-error')).toHaveTextContent(
 			'Informe um e-mail em formato válido (ex.: nome@dominio.com).',
 		)
 	})
@@ -143,7 +148,7 @@ describe('ContactForm', () => {
 
 		await user.click(screen.getByRole('button', { name: /receber diagnóstico gratuito/i }))
 
-		expect(screen.getByRole('status')).toHaveTextContent(
+		expect(document.getElementById('contact-phone-error')).toHaveTextContent(
 			'Informe um telefone válido no formato (41) 9 9999-9999.',
 		)
 	})
@@ -166,7 +171,7 @@ describe('ContactForm', () => {
 
 		await user.click(screen.getByRole('button', { name: /receber diagnóstico gratuito/i }))
 
-		expect(screen.getByRole('status')).toHaveTextContent(
+		expect(document.getElementById('contact-name-error')).toHaveTextContent(
 			`Nome deve ter no máximo ${NAME_MAX_LENGTH} caracteres.`,
 		)
 	})
@@ -181,7 +186,7 @@ describe('ContactForm', () => {
 
 		await user.click(screen.getByRole('button', { name: /receber diagnóstico gratuito/i }))
 
-		expect(screen.getByRole('status')).toHaveTextContent(
+		expect(document.getElementById('contact-email-error')).toHaveTextContent(
 			`E-mail deve ter no máximo ${EMAIL_MAX_LENGTH} caracteres.`,
 		)
 	})
