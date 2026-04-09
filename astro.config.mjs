@@ -9,7 +9,7 @@ validateRequiredEnv(process.env)
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://overflowlabs.com.br',
+	site: 'https://www.overflowlabs.com.br',
 	integrations: [sitemap()],
 	vite: {
 		plugins: [tailwindcss()],
