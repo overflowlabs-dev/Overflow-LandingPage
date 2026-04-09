@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;family=Inter:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#ffffff",
+                    "on-primary": "#1a1c1c",
+                    "on-secondary-container": "#d4e4f6",
+                    "primary-container": "#d4d4d4",
+                    "surface-container-highest": "#353534",
+                    "primary": "#e2e2e2",
+                    "on-tertiary": "#1a1c1c",
+                    "on-tertiary-container": "#000000",
+                    "on-error-container": "#ffdad6",
+                    "error": "#ffb4ab",
+                    "inverse-on-surface": "#313030",
+                    "tertiary": "#e2e2e2",
+                    "on-surface": "#e5e2e1",
+                    "surface-tint": "#c6c6c6",
+                    "surface-variant": "#353534",
+                    "on-error": "#690005",
+                    "surface-dim": "#131313",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-background": "#e5e2e1",
+                    "surface-container-high": "#2a2a2a",
+                    "secondary-fixed": "#b8c8da",
+                    "secondary-fixed-dim": "#9dadbe",
+                    "surface": "#131313",
+                    "primary-fixed": "#5d5e5f",
+                    "on-primary-fixed-variant": "#e3e2e2",
+                    "tertiary-container": "#909191",
+                    "error-container": "#93000a",
+                    "inverse-primary": "#5d5e5f",
+                    "background": "#131313",
+                    "on-secondary-fixed-variant": "#2d3d4b",
+                    "inverse-surface": "#e5e2e1",
+                    "secondary-container": "#394857",
+                    "on-secondary": "#0d1d2a",
+                    "outline": "#919191",
+                    "on-tertiary-fixed-variant": "#e2e2e2",
+                    "surface-bright": "#3a3939",
+                    "primary-fixed-dim": "#464747",
+                    "tertiary-fixed-dim": "#454747",
+                    "surface-container": "#201f1f",
+                    "secondary": "#b8c8da",
+                    "on-surface-variant": "#c6c6c6",
+                    "tertiary-fixed": "#5d5f5f",
+                    "on-primary-fixed": "#ffffff",
+                    "on-primary-container": "#000000",
+                    "outline-variant": "#474747",
+                    "surface-container-low": "#1c1b1b",
+                    "on-secondary-fixed": "#0d1d2a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(198, 198, 198, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        .status-orbit {
+            width: 8px;
+            height: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ffffff;
+        }
+        .metallic-silver-gradient {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 25%, #adb5bd 50%, #dee2e6 75%, #f8f9fa 100%);
+            background-size: 200% auto;
+            animation: silver-shine 5s linear infinite;
+        }
+        .metallic-text-shine {
+            background: linear-gradient(to right, #919191 20%, #ffffff 40%, #ffffff 60%, #919191 80%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: silver-shine 8s linear infinite;
+        }
+        @keyframes silver-shine {
+            to { background-position: 200% center; }
+        }
+        .btn-silver {
+            background: linear-gradient(145deg, #ffffff 0%, #c6c6c6 100%);
+            color: #131313;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-silver:hover {
+            background: linear-gradient(145deg, #c6c6c6 0%, #ffffff 100%);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        /* FAQ Accordion Details */
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+        details summary {
+            list-style: none;
+        }
+        details[open] summary .expand-icon {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-x-hidden">
+<div class="grain-overlay"></div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+<div class="bg-gradient-to-b from-white/10 to-transparent h-[1px]"></div>
+<div class="flex justify-between items-center px-8 py-6 max-w-screen-2xl mx-auto backdrop-blur-2xl transition-all">
+<div class="text-xl font-bold tracking-tighter text-white font-headline">OVERFLOW LABS</div>
+<div class="hidden md:flex gap-12 font-headline tracking-tight items-center">
+<a class="text-white border-b border-white/50 transition-colors duration-300" href="#">Soluções</a>
+<a class="text-[#B8C8DA]/60 hover:text-white transition-colors duration-300" href="#">Protocolo</a>
+<a class="text-[#B8C8DA]/60 hover:text-white transition-colors duration-300" href="#">Contato</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-sm font-headline font-bold text-sm tracking-tight hover:opacity-90 transition-opacity border border-white/20">
+                Connect
+            </button>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex flex-col justify-center items-center px-8 pt-20 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Abstract 3D fluid metallic silver sculpture" class="w-full h-full object-cover opacity-40 mix-blend-screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcM1H1Z46hNS1L76Vp5R7YiIgLh3fQ_4-qqfYQsrQGhtScNCLzq4RJGtayQXphgpidDpowic4Om1OR-sf5qL8_bM4FnI9NSGS8YENbjnSaIi65S4A0kDThjmbUb7u2GGlTMqdDQQ8K1AKwpJj7Kn_620lCGlqyH5vIovufsJk9QhXYPZGsfJmYQVlubBc2RADkuV76JXWpn8NyTshq-fYUKJJoSK3j-5DyFs9Ky3IG796Ko_V_5P18sWJUh4ureEC6dLaI-0JcfIc"/>
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background"></div>
+</div>
+<div class="relative z-10 max-w-5xl text-center space-y-8">
+<div class="flex items-center justify-center gap-3 mb-4">
+<div class="status-orbit animate-pulse"></div>
+<span class="font-label text-xs tracking-[0.3em] uppercase text-secondary">Design &amp; Desenvolvimento Sob Medida</span>
+</div>
+<h1 class="text-5xl md:text-8xl font-headline font-bold tracking-tighter leading-[0.9] text-white">
+                    Automatize. Integre. <br/><span class="metallic-text-shine">Transborde.</span>
+</h1>
+<p class="max-w-2xl mx-auto text-xl text-secondary font-body font-light leading-relaxed">
+                    Ecossistemas de IA, sistemas customizados e design de alta performance. A potência da <span class="text-white font-medium">Automação</span> encontra a elegância do <span class="text-white font-medium">Desenvolvimento Sob Medida</span>.
+                </p>
+<div class="pt-8">
+<button class="btn-silver px-10 py-5 rounded-sm font-headline font-bold text-lg tracking-tight">
+                        Solicitar Orçamento
+                    </button>
+</div>
+</div>
+</section>
+<!-- Solutions Section -->
+<section class="py-32 px-8 max-w-screen-2xl mx-auto">
+<div class="mb-24 space-y-4">
+<h2 class="text-4xl md:text-5xl font-headline font-bold tracking-tighter text-white">Soluções de Escala</h2>
+<div class="w-24 h-[1px] bg-white/40"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="glass-card p-8 group relative overflow-hidden flex flex-col justify-between min-h-[500px]">
+<div class="space-y-6">
+<span class="material-symbols-outlined text-4xl text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" data-icon="chat_bubble">chat_bubble</span>
+<h3 class="text-2xl font-headline font-bold text-white uppercase tracking-tight">Conversas Inteligentes</h3>
+<p class="text-secondary font-light">Integração profunda de LLMs via WhatsApp para atendimento que realmente resolve.</p>
+</div>
+<div class="mt-8 relative h-48 rounded-t-xl overflow-hidden bg-surface-container-low border-x border-t border-outline-variant/30">
+<img alt="AI Interface Mockup" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_HwMfg9uXICeKJT6j5U945kzi5gbzNG-HXG4hGbd2gKNJuBFNvkjRXz_3-HxWANXZewzBNmr51ggv5dTvp1vCDYx20uSx_Z69_aWMriJk8QsU6eOpGKVBFZlXksAM3A_vpMOd3tl1SQeOJVYzIGINtDtco0rR5PxY6xk5vE14vXCbqes1z0A_zfu_pmzgfKbnTYW9ivjRc3iIKNXvkrC6Jj6NTBeALdOc4pe79EB7hUX_j8zuirnL7zDuWVUl-P0zMpKqLfnGePE"/>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-card p-8 group relative overflow-hidden flex flex-col justify-between min-h-[500px]">
+<div class="space-y-6">
+<span class="material-symbols-outlined text-4xl text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" data-icon="settings_input_component">settings_input_component</span>
+<h3 class="text-2xl font-headline font-bold text-white uppercase tracking-tight">Sistemas Personalizados</h3>
+<p class="text-secondary font-light">Software sob medida e infraestrutura robusta para automatizar e escalar processos únicos do seu negócio.</p>
+</div>
+<div class="mt-8 relative h-48 rounded-t-xl overflow-hidden bg-surface-container-low border-x border-t border-outline-variant/30">
+<img alt="Network Visualization" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiFmQqrUBEyzBffGWPEz6uoR48zB0QmfCPZ0hjwh9Md8vGZSPgvsH7jiBPA-lcwcp-VW77uoifUH9F1D3Q9R2N7XJRzgb5OxA1O2vnzurHcGXQ33SL2ED9OWHuSh0plHiIrIfLlUgOoQIDU8la3kPCevautH_ekznDz5izjeRcE1JzHiTqHK0_5JoXeh_YKdy81XHKSXYT2cRC9a_ZaTXR0hkyUjzGgYcQXfxVIR2eu5rnA93zN1y8ybYbf0dxkgh2ZAPbmetyRpk"/>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-card p-8 group relative overflow-hidden flex flex-col justify-between min-h-[500px]">
+<div class="space-y-6">
+<span class="material-symbols-outlined text-4xl text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" data-icon="web">web</span>
+<h3 class="text-2xl font-headline font-bold text-white uppercase tracking-tight">Landing Pages de Alta Conversão</h3>
+<p class="text-secondary font-light">Design premium focado em performance, transformando visitantes em clientes com interfaces magnéticas.</p>
+</div>
+<div class="mt-8 relative h-48 rounded-t-xl overflow-hidden bg-surface-container-low border-x border-t border-outline-variant/30">
+<img alt="Premium Hardware" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAURal-T9cAo4EhBNtF_T6AMVzYC10msPY503SdUzdxbFeVxSpWs0JJvvRORGCfBUGI9RgsGJPC6M_lYT_r3p5VMl3MToQ76o8rPvD310a5B4hBDevZmbcjU0vFObwIlvmfzERQmx_fIaYJWQd242Cko9gE17XrP0j3vYmxquKYwE1hFYyXbevXvmJqJNhkRy_QLF2FfaGk_E_8We6K68ZFsBrtXJV4MYph-vVIrM8ji5C6pTnM2GIOiqNAKqprl0Vom20AogAHQ_8"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Protocol Section -->
+<section class="bg-surface-container-lowest py-32 px-8 border-y border-outline-variant/10">
+<div class="max-w-screen-2xl mx-auto flex flex-col md:flex-row items-center gap-16">
+<div class="flex-1 space-y-6">
+<h2 class="text-4xl md:text-6xl font-headline font-bold tracking-tighter text-white leading-none">Privacidade de <br/><span class="metallic-text-shine">Nível Enterprise</span></h2>
+<p class="text-secondary text-lg font-light max-w-md">Segurança não é uma opção, é a fundação de cada fluxo que construímos.</p>
+</div>
+<div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-8">
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]" data-icon="shield_lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+<span class="font-label text-xs font-bold tracking-widest text-white uppercase">Dados Protegidos</span>
+</div>
+<p class="text-xs text-secondary/60 leading-relaxed">Criptografia end-to-end em todas as camadas de transição de dados.</p>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]" data-icon="vpn_lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">vpn_lock</span>
+<span class="font-label text-xs font-bold tracking-widest text-white uppercase">Túneis Seguros</span>
+</div>
+<p class="text-xs text-secondary/60 leading-relaxed">Conexões isoladas que garantem a integridade das suas informações.</p>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]" data-icon="cloud_done" data-weight="fill" style="font-variation-settings: 'FILL' 1;">cloud_done</span>
+<span class="font-label text-xs font-bold tracking-widest text-white uppercase">Hospedagem Soberana</span>
+</div>
+<p class="text-xs text-secondary/60 leading-relaxed">Opções de implantação local ou em nuvens privadas exclusivas.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Convert & CTA Section -->
+<section class="py-32 px-8 max-w-screen-2xl mx-auto border-b border-outline-variant/10">
+<div class="flex flex-col lg:flex-row gap-20">
+<div class="flex-1 space-y-8">
+<h2 class="text-5xl md:text-7xl font-headline font-bold tracking-tighter text-white">Escale sem aumentar o Headcount</h2>
+<p class="text-2xl text-secondary font-light">Dobre sua entrega, não sua folha de pagamento.</p>
+<div class="pt-8 space-y-4 border-t border-outline-variant/20 max-w-sm">
+<div class="flex justify-between items-center text-sm">
+<span class="text-secondary/60 font-label tracking-widest uppercase">Eficiência Operacional</span>
+<span class="text-white">+340%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1">
+<div class="metallic-silver-gradient w-4/5 h-full shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>
+</div>
+</div>
+</div>
+<div class="flex-1 bg-surface-container-low p-10 md:p-16 border border-outline-variant/10 rounded-sm glass-card">
+<form class="space-y-10">
+<div class="space-y-8">
+<div class="relative">
+<label class="block font-label text-[10px] tracking-[0.2em] uppercase text-secondary/60 mb-2">Nome</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-white focus:ring-0 focus:border-white placeholder:text-surface-container-highest transition-colors font-body" placeholder="Como devemos te chamar?" type="text"/>
+</div>
+<div class="relative">
+<label class="block font-label text-[10px] tracking-[0.2em] uppercase text-secondary/60 mb-2">E-mail</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-white focus:ring-0 focus:border-white placeholder:text-surface-container-highest transition-colors font-body" placeholder="seu@email.com" type="email"/>
+</div>
+<div class="relative">
+<label class="block font-label text-[10px] tracking-[0.2em] uppercase text-secondary/60 mb-2">Desafio de Automação ou Projeto</label>
+<textarea class="w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-white focus:ring-0 focus:border-white placeholder:text-surface-container-highest transition-colors font-body resize-none" placeholder="O que você precisa desenvolver ou automatizar?" rows="3"></textarea>
+</div>
+</div>
+<button class="w-full btn-silver py-5 rounded-sm font-headline font-bold text-lg tracking-tight" type="submit">
+                            Solicitar Orçamento
+                        </button>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+<a class="flex items-center justify-center gap-3 bg-white/5 border border-white/20 py-4 px-6 rounded-sm font-headline font-bold text-sm tracking-tight text-white hover:bg-white/10 transition-all backdrop-blur-sm" href="#">
+<span class="material-symbols-outlined text-lg">chat</span>
+        Fale pelo WhatsApp
+    </a>
+<a class="flex items-center justify-center gap-3 bg-white/5 border border-white/20 py-4 px-6 rounded-sm font-headline font-bold text-sm tracking-tight text-white hover:bg-white/10 transition-all backdrop-blur-sm" href="#">
+<span class="material-symbols-outlined text-lg">photo_camera</span>
+        Siga no Instagram
+    </a>
+</div>
+</form>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-32 px-8 max-w-4xl mx-auto">
+<div class="mb-16 text-center">
+<h2 class="text-4xl md:text-5xl font-headline font-bold tracking-tighter text-white">Perguntas Frequentes</h2>
+<div class="w-16 h-[1px] bg-white/40 mx-auto mt-6"></div>
+</div>
+<div class="space-y-4">
+<details class="group border-b border-outline-variant/30">
+<summary class="flex justify-between items-center py-6 cursor-pointer hover:bg-white/5 transition-all px-4 rounded-t-sm group-open:bg-white/5">
+<span class="font-headline text-lg md:text-xl font-medium text-white tracking-tight">Como a automação via WhatsApp funciona?</span>
+<span class="material-symbols-outlined text-white transition-transform duration-300 expand-icon" data-icon="add">add</span>
+</summary>
+<div class="px-4 pb-8 text-secondary font-light leading-relaxed">
+                Nós integramos LLMs (Modelos de Linguagem de Larga Escala) diretamente à API oficial do WhatsApp. Isso permite que seu negócio tenha um atendente inteligente capaz de entender contextos complexos, agendar reuniões e fechar vendas 24/7, mantendo o tom de voz da sua marca.
+            </div>
+</details>
+<details class="group border-b border-outline-variant/30">
+<summary class="flex justify-between items-center py-6 cursor-pointer hover:bg-white/5 transition-all px-4 rounded-t-sm group-open:bg-white/5">
+<span class="font-headline text-lg md:text-xl font-medium text-white tracking-tight">Quanto tempo leva para desenvolver uma landing page?</span>
+<span class="material-symbols-outlined text-white transition-transform duration-300 expand-icon" data-icon="add">add</span>
+</summary>
+<div class="px-4 pb-8 text-secondary font-light leading-relaxed">
+                Nosso protocolo de design premium foca em velocidade sem sacrificar a qualidade. Geralmente, uma landing page de alta performance é entregue entre 7 a 15 dias úteis, incluindo design personalizado, copywriting focado em conversão e otimização técnica de SEO.
+            </div>
+</details>
+<details class="group border-b border-outline-variant/30">
+<summary class="flex justify-between items-center py-6 cursor-pointer hover:bg-white/5 transition-all px-4 rounded-t-sm group-open:bg-white/5">
+<span class="font-headline text-lg md:text-xl font-medium text-white tracking-tight">Vocês criam sistemas personalizados para qualquer nicho?</span>
+<span class="material-symbols-outlined text-white transition-transform duration-300 expand-icon" data-icon="add">add</span>
+</summary>
+<div class="px-4 pb-8 text-secondary font-light leading-relaxed">
+                Sim. Nossa expertise em desenvolvimento agnóstico nos permite criar ferramentas para diversos setores, desde dashboards internos para logística até sistemas complexos de CRM e automação industrial, sempre focados em resolver o gargalo operacional específico do seu negócio.
+            </div>
+</details>
+<details class="group border-b border-outline-variant/30">
+<summary class="flex justify-between items-center py-6 cursor-pointer hover:bg-white/5 transition-all px-4 rounded-t-sm group-open:bg-white/5">
+<span class="font-headline text-lg md:text-xl font-medium text-white tracking-tight">Os dados da minha empresa estão seguros com IA?</span>
+<span class="material-symbols-outlined text-white transition-transform duration-300 expand-icon" data-icon="add">add</span>
+</summary>
+<div class="px-4 pb-8 text-secondary font-light leading-relaxed">
+                A segurança é nosso pilar principal. Implementamos criptografia de ponta a ponta e utilizamos instâncias privadas de modelos de IA, garantindo que suas informações corporativas nunca sejam usadas para treinamento público ou fiquem vulneráveis a acessos externos.
+            </div>
+</details>
+<details class="group border-b border-outline-variant/30">
+<summary class="flex justify-between items-center py-6 cursor-pointer hover:bg-white/5 transition-all px-4 rounded-t-sm group-open:bg-white/5">
+<span class="font-headline text-lg md:text-xl font-medium text-white tracking-tight">Como solicitar um orçamento?</span>
+<span class="material-symbols-outlined text-white transition-transform duration-300 expand-icon" data-icon="add">add</span>
+</summary>
+<div class="px-4 pb-8 text-secondary font-light leading-relaxed">
+                Basta preencher o formulário acima com seus dados e uma breve descrição do seu desafio. Nossa equipe técnica fará uma análise prévia e entrará em contato em até 24 horas para agendar uma consultoria estratégica gratuita.
+            </div>
+</details>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0E0E0E] w-full py-12 px-8 border-t border-white/10">
+<div class="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-['Inter'] text-xs tracking-widest uppercase">
+<div class="text-lg font-bold text-white font-headline tracking-tighter">OVERFLOW LABS</div>
+<p class="text-[#B8C8DA]/40 text-center md:text-left">© 2024 OVERFLOW LABS. AUTOMATIZE. INTEGRE. TRANSBORDE.</p>
+<div class="flex gap-8 text-[#B8C8DA]/40">
+<a class="hover:text-white transition-opacity" href="#">Instagram</a>
+<a class="hover:text-white transition-opacity" href="#">WhatsApp</a>
+<a class="hover:text-white transition-opacity" href="#">Privacy</a>
+<a class="hover:text-white transition-opacity" href="#">Terms</a>
+</div>
+</div>
+</footer>
+</body></html>

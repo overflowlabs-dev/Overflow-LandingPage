@@ -1,0 +1,396 @@
+---
+description: Implement animations in Astro projects using GSAP, Motion One, or pure CSS. Apply this rule whenever the user wants to add animations, transitions, scroll effects, entrance effects, hover interactions, cursor effects, parallax, stagger reveals, page transitions, or any motion design to an Astro site.
+globs: **/*.astro, **/*.ts, **/*.js, **/styles/*.css
+alwaysApply: false
+---
+
+# Astro Animations
+
+## Library Selection
+
+| Use case | Library |
+|---|---|
+| Complex sequences, scroll-scrubbing, timelines | GSAP |
+| Lightweight scroll reveals, simple transitions | Motion One |
+| No-JS, simple effects, CSS-only | Pure CSS |
+| Custom cursor, magnetic effects, pointer tracking | GSAP |
+
+**Default:** site-wide ou complexo → GSAP. Componente leve → Motion One. Sem interatividade → CSS puro.
+
+---
+
+## Astro-Specific Rules
+
+- Animações rodam em `<script>` dentro de arquivos `.astro` — nunca no frontmatter
+- Cada componente `.astro` é dono do seu próprio script de animação
+- Componentes com framework (React/Vue) precisam de diretiva `client:` e animações dentro de `onMount` / `useEffect`
+- Se o projeto usa `<ViewTransitions />`, inicializar dentro de `astro:page-load`:
+
+```astro
+<script>
+  import gsap from "gsap"
+  import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+  document.addEventListener('astro:page-load', () => {
+    gsap.registerPlugin(ScrollTrigger)
+    // inits aqui
+  })
+
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach(st => st.kill())
+  })
+</script>
+```
+
+---
+
+## Performance Rules
+
+- Animar apenas `transform` e `opacity` — nunca `width`, `height`, `top`, `left`
+- `will-change: transform` somente em elementos que animam imediatamente no load
+- Usar `ScrollTrigger.batch()` para muitos elementos em vez de triggers individuais
+- Easings de entrada: `power2.out` ou `expo.out` — saída: `power2.in`
+- Sempre incluir suporte a `prefers-reduced-motion`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+Ou em JS:
+```js
+const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+if (!reduced) { /* animações */ }
+```
+
+---
+
+## Installation
+
+```bash
+# GSAP
+npm install gsap
+
+# Motion One
+npm install motion
+```
+
+CDN (no `<head>`):
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12/dist/ScrollTrigger.min.js"></script>
+```
+
+---
+
+# GSAP
+
+## Setup
+
+```js
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+gsap.registerPlugin(ScrollTrigger)
+```
+
+## Core API
+
+```js
+// FROM — anima dos valores fornecidos até o estado atual
+gsap.from(".hero h1", { y: 40, opacity: 0, duration: 0.8, ease: "expo.out" })
+
+// TO — anima até os valores fornecidos
+gsap.to(".box", { x: 200, rotation: 45, duration: 1 })
+
+// FROMTO — início e fim explícitos
+gsap.fromTo(".card", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6 })
+```
+
+## Timeline — sequenciar animações
+
+```js
+const tl = gsap.timeline({ delay: 0.2 })
+tl.from("nav",  { y: -60, opacity: 0, duration: 0.5 })
+  .from("h1",   { y: 30,  opacity: 0, duration: 0.7 }, "-=0.2")
+  .from("p",    { y: 20,  opacity: 0, duration: 0.5 }, "-=0.3")
+  .from(".cta", { scale: 0.9, opacity: 0, duration: 0.4 }, "-=0.2")
+```
+
+## ScrollTrigger
+
+```js
+// Scroll reveal básico
+gsap.from(".section", {
+  scrollTrigger: {
+    trigger: ".section",
+    start: "top 85%",
+    toggleActions: "play none none reverse"
+  },
+  y: 50, opacity: 0, duration: 0.8
+})
+
+// Stagger no scroll
+gsap.from(".card", {
+  scrollTrigger: { trigger: ".cards-grid", start: "top 75%" },
+  y: 40, opacity: 0, stagger: 0.1, duration: 0.6, ease: "power2.out"
+})
+
+// Scrub — animação vinculada à posição do scroll
+gsap.to(".parallax-img", {
+  scrollTrigger: {
+    trigger: ".parallax-section",
+    start: "top bottom", end: "bottom top",
+    scrub: 1
+  },
+  y: -100
+})
+
+// Batch — performance para muitos elementos
+ScrollTrigger.batch(".item", {
+  onEnter: (elements) => gsap.from(elements, {
+    opacity: 0, y: 30, stagger: 0.08, duration: 0.6
+  }),
+  start: "top 90%"
+})
+```
+
+## Custom Cursor
+
+```astro
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
+
+<style>
+  #cursor {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid rgba(255,255,255,0.5); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+  }
+  #cursor-dot {
+    position: fixed; width: 4px; height: 4px;
+    background: white; border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+  }
+</style>
+
+<script>
+  import gsap from "gsap"
+  const cursor = document.getElementById("cursor")
+  const dot = document.getElementById("cursor-dot")
+
+  window.addEventListener("mousemove", (e) => {
+    gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.4, ease: "power2.out" })
+    gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1 })
+  })
+
+  document.querySelectorAll("a, button, [data-cursor-grow]").forEach(el => {
+    el.addEventListener("mouseenter", () => gsap.to(cursor, { scale: 2.5, duration: 0.3 }))
+    el.addEventListener("mouseleave", () => gsap.to(cursor, { scale: 1, duration: 0.3 }))
+  })
+</script>
+```
+
+## Magnetic Button
+
+```astro
+<button data-magnetic>Entrar em contato</button>
+
+<script>
+  import gsap from "gsap"
+  document.querySelectorAll("[data-magnetic]").forEach(el => {
+    el.addEventListener("mousemove", (e) => {
+      const rect = el.getBoundingClientRect()
+      const x = e.clientX - rect.left - rect.width / 2
+      const y = e.clientY - rect.top - rect.height / 2
+      gsap.to(el, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: "power2.out" })
+    })
+    el.addEventListener("mouseleave", () => {
+      gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" })
+    })
+  })
+</script>
+```
+
+## Text Reveal (sem plugin)
+
+```js
+const h1 = document.querySelector("h1")
+const words = h1.textContent.split(" ").map(w => `<span style="display:inline-block">${w}</span>`)
+h1.innerHTML = words.join(" ")
+gsap.from(h1.querySelectorAll("span"), {
+  y: 40, opacity: 0, stagger: 0.06, duration: 0.6, ease: "power2.out"
+})
+```
+
+## Ease Reference
+
+| Efeito | Ease |
+|---|---|
+| Entrada suave | `power2.out` |
+| Entrada snappy | `expo.out` |
+| Bounce | `elastic.out(1, 0.4)` |
+| Saída | `power2.in` |
+| Natural | `sine.inOut` |
+
+---
+
+# Motion One
+
+## Setup
+
+```js
+import { animate, scroll, inView, stagger } from "motion"
+```
+
+## Core API
+
+```js
+animate(".hero", { opacity: [0, 1], y: [30, 0] }, { duration: 0.6, easing: "ease-out" })
+```
+
+## Scroll Reveal
+
+```astro
+<script>
+  import { inView, animate, stagger } from "motion"
+
+  // Elemento único
+  inView(".hero-text", ({ target }) => {
+    animate(target, { opacity: [0, 1], y: [30, 0] }, { duration: 0.7, easing: [0.16, 1, 0.3, 1] })
+  })
+
+  // Múltiplos com stagger
+  inView(".features", () => {
+    animate(".feature-card",
+      { opacity: [0, 1], y: [24, 0] },
+      { duration: 0.5, delay: stagger(0.1), easing: "ease-out" }
+    )
+  })
+</script>
+```
+
+## Page Entrance
+
+```js
+animate(
+  ["nav", "h1", "h1 + p", ".cta-btn"],
+  { opacity: [0, 1], y: [20, 0] },
+  { duration: 0.6, delay: stagger(0.15), easing: "ease-out" }
+)
+```
+
+## Hover
+
+```js
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("mouseenter", () => animate(card, { scale: 1.03, y: -4 }, { duration: 0.2 }))
+  card.addEventListener("mouseleave", () => animate(card, { scale: 1, y: 0 }, { duration: 0.3 }))
+})
+```
+
+## Parallax
+
+```js
+scroll(
+  animate(".hero-visual", { y: [0, -80] }),
+  { target: document.querySelector(".hero"), offset: ["start start", "end start"] }
+)
+```
+
+## Easing Reference
+
+| Efeito | Valor |
+|---|---|
+| Snappy | `[0.16, 1, 0.3, 1]` |
+| Linear | `"linear"` |
+| Ease out | `"ease-out"` |
+| Spring | `{ type: "spring", stiffness: 300, damping: 20 }` |
+
+---
+
+# CSS Animations
+
+## Scroll Reveal com Intersection Observer
+
+```astro
+<div class="reveal">Conteúdo</div>
+
+<style>
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target) }
+    })
+  }, { threshold: 0.15 })
+  document.querySelectorAll(".reveal").forEach(el => observer.observe(el))
+</script>
+```
+
+## Keyframes
+
+```css
+@keyframes fadeUp   { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn  { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes float    { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,245,180,0.3); }
+  50%       { box-shadow: 0 0 20px 6px rgba(0,245,180,0.1); }
+}
+@keyframes shimmer  {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+```
+
+## Hover Transitions
+
+```css
+/* Card lift */
+.card { transition: transform 0.2s ease, border-color 0.2s ease; }
+.card:hover { transform: translateY(-4px); }
+
+/* Button */
+.btn { transition: transform 0.15s ease; }
+.btn:hover  { transform: scale(1.03); }
+.btn:active { transform: scale(0.97); }
+
+/* Link underline */
+.link { position: relative; text-decoration: none; }
+.link::after {
+  content: ''; position: absolute; bottom: -2px; left: 0;
+  width: 0; height: 1px; background: currentColor;
+  transition: width 0.3s ease;
+}
+.link:hover::after { width: 100%; }
+```
+
+## Utility Classes
+
+```css
+.animate-fade-up    { animation: fadeUp    0.6s ease-out forwards; }
+.animate-fade-in    { animation: fadeIn    0.5s ease-out forwards; }
+.animate-scale-in   { animation: scaleIn   0.4s ease-out forwards; }
+.animate-float      { animation: float     4s   ease-in-out infinite; }
+.animate-pulse-glow { animation: pulseGlow 2.5s ease-in-out infinite; }
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+```

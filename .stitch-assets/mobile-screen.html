@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#C0C0C0",
+          "background-light": "#f7f7f7",
+          "background-dark": "#191919",
+        },
+        fontFamily: {
+          "display": ["Space Grotesk"],
+          "headline": ["Space Grotesk"],
+          "body": ["Inter"]
+        },
+        borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+      },
+    },
+  }
+</script>
+<style>
+        body {
+            background-color: #000000;
+            color: #C0C0C0;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .silver-button {
+            background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+            color: #000000;
+        }
+    </style>
+<style>
+        body {
+            background-color: #000000;
+            color: #C0C0C0;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .silver-button {
+            background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+            color: #000000;
+        }
+    </style>
+</head>
+<body class="bg-neutral-950 selection:bg-primary selection:text-neutral-900">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-950/80 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-6 h-16 w-full"><div class="flex items-center justify-center w-full">
+<span class="text-xl font-bold tracking-widest text-white font-['Space_Grotesk'] tracking-tighter uppercase">OVERFLOW LABS</span>
+</div></nav>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative min-h-[751px] flex flex-col items-center justify-center px-6 text-center overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-40">
+<div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1000&amp;q=80')] bg-cover bg-center grayscale contrast-150 opacity-20" data-alt="monochromatic abstract 3D fluid metal sculpture"></div>
+</div>
+<div class="relative z-10 space-y-6 max-w-md">
+<h1 class="text-5xl font-headline font-bold leading-none tracking-tighter text-white">
+                    Automatize.<br/>Integre.<br/>Transborde.
+                </h1>
+<p class="text-gray-400 font-body font-light text-lg tracking-tight">
+                    Engenharia de processos inteligentes para empresas que buscam o estado da arte em eficiência.
+                </p>
+<div class="pt-8">
+<button class="silver-button w-full py-4 rounded-lg font-headline font-bold uppercase tracking-widest text-sm shadow-xl shadow-white/5 active:scale-95 transition-transform">
+                        Solicitar Orçamento
+                    </button>
+</div>
+</div>
+</section>
+<!-- Solutions Section -->
+<section class="px-6 py-20 space-y-12">
+<div class="space-y-2">
+<h2 class="text-xs font-headline tracking-[0.3em] text-secondary-fixed uppercase">Serviços</h2>
+<h3 class="text-3xl font-headline font-medium text-white">Ecossistema de Soluções</h3>
+</div>
+<div class="space-y-4">
+<!-- Card 1 -->
+<div class="glass-card p-8 rounded-xl space-y-6">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="forum">forum</span>
+<div class="space-y-2">
+<h4 class="text-xl font-headline font-semibold text-white">Conversas Inteligentes</h4>
+<p class="text-gray-400 font-body text-sm leading-relaxed">
+                            Agentes de IA que vendem e suportam seus clientes 24/7 com tom de voz humano e técnico.
+                        </p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-card p-8 rounded-xl space-y-6">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="hub">hub</span>
+<div class="space-y-2">
+<h4 class="text-xl font-headline font-semibold text-white">Sistemas Personalizados</h4>
+<p class="text-gray-400 font-body text-sm leading-relaxed">
+                            Arquitetura de software sob medida para integrar seus departamentos em um fluxo contínuo.
+                        </p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-card p-8 rounded-xl space-y-6 border-primary/20">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="auto_awesome">auto_awesome</span>
+<div class="space-y-2">
+<h4 class="text-xl font-headline font-semibold text-white">Landing Pages de Alta Conversão</h4>
+<p class="text-gray-400 font-body text-sm leading-relaxed">
+                            Interfaces minimalistas projetadas com foco em dados e psicologia de consumo premium.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Protocol -->
+<section class="bg-surface-container-lowest py-20 px-6">
+<div class="text-center space-y-12">
+<div class="space-y-4">
+<span class="material-symbols-outlined text-secondary-fixed text-5xl" data-icon="verified_user">verified_user</span>
+<h2 class="text-2xl font-headline font-bold text-white uppercase tracking-tighter">Privacidade de Nível Enterprise</h2>
+<p class="text-gray-500 font-body text-sm max-w-xs mx-auto">
+                        Seus dados são criptografados e protegidos por protocolos de segurança militares.
+                    </p>
+</div>
+<div class="flex justify-around items-center opacity-40 grayscale contrast-125">
+<span class="material-symbols-outlined text-4xl" data-icon="security">security</span>
+<span class="material-symbols-outlined text-4xl" data-icon="lock">lock</span>
+<span class="material-symbols-outlined text-4xl" data-icon="cloud_done">cloud_done</span>
+<span class="material-symbols-outlined text-4xl" data-icon="shield">shield</span>
+</div>
+</div>
+</section>
+<!-- Convert & CTA -->
+<section class="px-6 py-24 bg-neutral-950">
+<div class="space-y-10">
+<div class="space-y-4">
+<h2 class="text-4xl font-headline font-bold text-white tracking-tight">Escale sem aumentar o Headcount</h2>
+<p class="text-gray-400 font-body font-light">
+                        Deixe a tecnologia carregar o peso operacional enquanto você foca na estratégia.
+                    </p>
+</div>
+<form class="space-y-4">
+<input class="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-white/30 transition-colors" placeholder="Nome completo" type="text"/>
+<input class="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-white/30 transition-colors" placeholder="E-mail corporativo" type="email"/>
+<textarea class="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-white/30 transition-colors" placeholder="Fale sobre seu desafio" rows="4"></textarea>
+<button class="silver-button w-full py-5 rounded-lg font-headline font-bold uppercase tracking-widest text-sm active:scale-95 transition-all" type="submit">
+                        Solicitar Diagnóstico
+                    </button>
+</form>
+<div class="flex flex-col gap-3 pt-4">
+<p class="text-[10px] text-center text-gray-600 uppercase tracking-widest mb-2">Contatos Rápidos</p>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-white/5 border border-white/10 rounded-lg py-3 flex items-center justify-center gap-2 text-sm text-gray-300">
+<span class="material-symbols-outlined text-sm" data-icon="chat">chat</span> WhatsApp
+                        </button>
+<button class="bg-white/5 border border-white/10 rounded-lg py-3 flex items-center justify-center gap-2 text-sm text-gray-300">
+<span class="material-symbols-outlined text-sm" data-icon="camera">camera</span> Instagram
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="px-6 py-20 bg-surface-container-lowest">
+<h2 class="text-2xl font-headline font-bold text-white mb-8">Dúvidas Frequentes</h2>
+<div class="space-y-0">
+<div class="border-t border-white/10 py-6 flex justify-between items-center group">
+<p class="text-sm font-medium text-gray-300">Como funciona a integração de IA?</p>
+<span class="material-symbols-outlined text-gray-500" data-icon="expand_more">expand_more</span>
+</div>
+<div class="border-t border-white/10 py-6 flex justify-between items-center">
+<p class="text-sm font-medium text-gray-300">Qual o prazo médio de implementação?</p>
+<span class="material-symbols-outlined text-gray-500" data-icon="expand_more">expand_more</span>
+</div>
+<div class="border-t border-white/10 py-6 flex justify-between items-center">
+<p class="text-sm font-medium text-gray-300">Existe suporte pós-entrega?</p>
+<span class="material-symbols-outlined text-gray-500" data-icon="expand_more">expand_more</span>
+</div>
+<div class="border-t border-b border-white/10 py-6 flex justify-between items-center">
+<p class="text-sm font-medium text-gray-300">Segurança de dados e LGPD?</p>
+<span class="material-symbols-outlined text-gray-500" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-12 px-6 mb-20 bg-neutral-950 border-t border-white/5 flex flex-col items-center gap-4 text-center">
+<span class="text-gray-200 font-bold font-['Space_Grotesk'] tracking-widest">OVERFLOW LABS</span>
+<div class="flex gap-6">
+<a class="text-gray-500 hover:text-gray-200 text-xs font-['Inter'] font-light tracking-tight" href="#">Privacy</a>
+<a class="text-gray-500 hover:text-gray-200 text-xs font-['Inter'] font-light tracking-tight" href="#">Terms</a>
+<a class="text-gray-500 hover:text-gray-200 text-xs font-['Inter'] font-light tracking-tight" href="#">Github</a>
+</div>
+<p class="text-gray-400 font-['Inter'] text-[10px] font-light tracking-tight">© 2024 OVERFLOW LABS. ALL RIGHTS RESERVED.</p>
+</footer>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-neutral-950/90 backdrop-blur-lg border-t border-white/5 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-lg">
+<a class="flex flex-col items-center justify-center bg-gray-300/10 text-white rounded-lg p-2" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 p-2 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Work</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 p-2 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="layers">layers</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Services</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 p-2 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="help_outline">help_outline</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">FAQ</span>
+</a><a class="flex flex-col items-center justify-center text-gray-500 p-2 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="mail">mail</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Contact</span>
+</a>
+</nav>
+</body></html>

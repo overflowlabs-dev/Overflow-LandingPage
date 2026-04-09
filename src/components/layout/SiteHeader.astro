@@ -1,0 +1,105 @@
+---
+import Button from '../ui/Button.astro'
+
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+---
+
+<nav
+	class:list={[
+		'md:fixed top-0 z-50 w-full border-b border-white/10 bg-neutral-950 md:bg-[color:var(--ols-color-nav-bg)] md:shadow-ols-nav md:backdrop-blur-xl',
+		className,
+	]}
+	aria-label="Principal"
+>
+	<div class="hidden h-px bg-gradient-to-b from-white/10 to-transparent md:block"></div>
+	<div
+		data-site-header-inner
+		class="mx-auto flex h-16 max-w-screen-2xl items-center justify-center px-6 md:h-auto md:justify-between md:px-8 md:py-6 md:backdrop-blur-2xl"
+	>
+		<a
+			href="#home"
+			data-site-header-brand
+			class="inline-flex shrink-0 items-center opacity-0"
+		>
+			<img
+				src="/logo.svg"
+				alt="Overflow Labs"
+				width="160"
+				height="84"
+				class="h-8 w-auto max-w-[min(100%,11rem)] object-contain md:h-9"
+			/>
+		</a>
+		<div
+			data-site-header-links
+			class="hidden items-center gap-12 font-headline tracking-tight md:flex"
+		>
+			<a
+				data-site-header-link
+				data-nav-section-link
+				class="ols-nav-link text-secondary/60 opacity-0 hover:text-white"
+				href="#home">Home</a>
+			<a
+				data-site-header-link
+				data-nav-section-link
+				class="ols-nav-link text-secondary/60 opacity-0 hover:text-white"
+				href="#solucoes">Soluções</a>
+			<a
+				data-site-header-link
+				data-nav-section-link
+				class="ols-nav-link text-secondary/60 opacity-0 hover:text-white"
+				href="#sobre">Sobre</a>
+			<a
+				data-site-header-link
+				data-nav-section-link
+				class="ols-nav-link text-secondary/60 opacity-0 hover:text-white"
+				href="#protocolo">Protocolo</a>
+			
+			<a
+				data-site-header-link
+				data-nav-section-link
+				class="ols-nav-link text-secondary/60 opacity-0 hover:text-white"
+				href="#faq">FAQ</a>
+				
+			<a
+				data-site-header-link
+				data-nav-section-link
+				class="ols-nav-link text-secondary/60 opacity-0 hover:text-white"
+				href="#contato">Contato</a>
+		</div>
+		<Button
+			href="#contato"
+			variant="primary"
+			data-site-header-cta
+			class="hidden px-6 py-2 text-sm opacity-0 transition-transform duration-200 hover:scale-[1.04] hover:opacity-100 md:inline-flex"
+		>
+		Automatizar meu negócio
+		</Button>
+	</div>
+</nav>
+
+<script>
+	import { domReveal, stagger } from '../../lib/animate-dom'
+	import { prefersReducedMotion } from '../../lib/prefers-reduced-motion'
+	import { setupGlobalNavActive } from '../../lib/nav-active'
+
+	function runReveal() {
+		if (prefersReducedMotion()) {
+			document
+				.querySelectorAll('[data-site-header-brand], [data-site-header-cta], [data-site-header-link]')
+				.forEach((el) => el.classList.remove('opacity-0'))
+			return
+		}
+		const brand = document.querySelector('[data-site-header-brand]')
+		const cta = document.querySelector('[data-site-header-cta]')
+		const navLinks = document.querySelectorAll('[data-site-header-link]')
+		const els = [brand, ...navLinks, cta].filter(Boolean) as Element[]
+		domReveal(els, { opacity: [0, 1], y: [-12, 0] }, { duration: 0.55, delay: stagger(0.06) })
+	}
+
+	runReveal()
+	setupGlobalNavActive()
+</script>

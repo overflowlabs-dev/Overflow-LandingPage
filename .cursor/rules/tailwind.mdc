@@ -1,0 +1,166 @@
+---
+description: Convenções e boas práticas de Tailwind CSS — estrutura HTML limpa, sem divs desnecessárias e sem estilos repetidos
+globs: ["**/*.astro", "**/*.tsx", "**/*.ts"]
+alwaysApply: false
+---
+
+# Tailwind CSS — Boas Práticas
+
+## Regra Principal: HTML Limpo
+
+Cada elemento HTML deve ter uma razão semântica para existir.
+Nunca criar `<div>` só para aplicar estilo — aplique direto no elemento semântico.
+
+```tsx
+// ❌ Errado — div desnecessária só para padding
+<div className="p-4">
+  <div className="bg-zinc-900">
+    <p className="text-center text-white">Olá</p>
+  </div>
+</div>
+
+// ✅ Correto — estilos direto no elemento
+<p className="p-4 bg-zinc-900 text-center text-white">Olá</p>
+```
+
+## Máximo de Aninhamento
+
+- **Máximo 3 níveis** de divs aninhadas em um mesmo componente
+- Se precisar de mais, é sinal que deve virar um subcomponente
+- Usar elementos semânticos no lugar de divs genéricas:
+  `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`, `<ul>`, `<li>`
+
+```tsx
+// ❌ Errado — 4 níveis de div sem semântica
+<div className="flex">
+  <div className="w-full">
+    <div className="px-4">
+      <div className="text-white">Conteúdo</div>
+    </div>
+  </div>
+</div>
+
+// ✅ Correto — semântico e direto
+<section className="flex w-full px-4 text-white">
+  Conteúdo
+</section>
+```
+
+## Espaçamento: Prefer gap a margin
+
+Usar `gap-*` no pai em vez de `mt-*`/`mb-*` nos filhos — evita repetição.
+
+```tsx
+// ❌ Errado — margin repetida em cada filho
+<ul>
+  <li className="mt-4">Item 1</li>
+  <li className="mt-4">Item 2</li>
+  <li className="mt-4">Item 3</li>
+</ul>
+
+// ✅ Correto — gap no pai
+<ul className="flex flex-col gap-4">
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+```
+
+## Sem Classes Redundantes
+
+Nunca colocar classes que se contradizem ou que já estão implícitas.
+
+```tsx
+// ❌ Errado — redundante
+<div className="flex flex-row items-center w-full max-w-full min-w-0 block">
+
+// ✅ Correto — só o necessário
+<div className="flex items-center w-full min-w-0">
+```
+
+Exemplos de redundâncias comuns a evitar:
+- `flex flex-row` → `flex` já é row por padrão
+- `w-full max-w-full` → `w-full` já limita a 100%
+- `hidden invisible` → usar só um
+- `block` junto com `flex` ou `grid`
+
+## Mobile-First Obrigatório
+
+Tailwind é mobile-first. Escreva o estilo base para mobile e sobrescreva para desktop.
+
+```tsx
+// ❌ Errado — começando pelo desktop
+<div className="flex-row md:flex-col sm:flex-col">
+
+// ✅ Correto — começando pelo mobile
+<div className="flex-col md:flex-row">
+```
+
+Breakpoints disponíveis (min-width):
+- `sm:` → 640px
+- `md:` → 768px
+- `lg:` → 1024px
+- `xl:` → 1280px
+
+## Componentes Reutilizáveis em vez de Classes Repetidas
+
+Se o mesmo conjunto de classes aparece em mais de um lugar, vira componente.
+
+```tsx
+// ❌ Errado — mesmo estilo repetido em 3 lugares
+<button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+  Enviar
+</button>
+<button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+  Contato
+</button>
+
+// ✅ Correto — componente compartilhado
+<PrimaryButton label="Enviar" href="#contato" />
+<PrimaryButton label="Contato" href="#form" />
+```
+
+## Classes Dinâmicas — Nunca Concatenar Strings
+
+O Tailwind precisa ver a classe completa no código para incluir no bundle.
+
+```tsx
+// ❌ Errado — Tailwind não vai gerar a classe
+const cor = 'blue'
+<div className={`bg-${cor}-600`}>
+
+// ✅ Correto — classe completa sempre visível
+const classes = {
+  blue: 'bg-blue-600',
+  red: 'bg-red-600',
+}
+<div className={classes[cor]}>
+```
+
+## Ordem de Classes (Consistência)
+
+Seguir sempre essa ordem para facilitar leitura:
+1. Layout: `flex`, `grid`, `block`, `hidden`
+2. Dimensões: `w-*`, `h-*`, `min-w-*`, `max-w-*`
+3. Posicionamento: `relative`, `absolute`, `fixed`, `inset-*`, `z-*`
+4. Flexbox/Grid: `items-*`, `justify-*`, `gap-*`, `col-span-*`
+5. Espaçamento: `p-*`, `px-*`, `py-*`, `m-*`
+6. Tipografia: `text-*`, `font-*`, `leading-*`, `tracking-*`
+7. Cores: `bg-*`, `text-*`, `border-*`
+8. Bordas: `rounded-*`, `border`, `border-*`
+9. Efeitos: `shadow-*`, `opacity-*`, `transition-*`
+10. Responsividade: `sm:`, `md:`, `lg:`
+11. Estados: `hover:`, `focus:`, `active:`, `disabled:`
+
+## Prompt de Revisão
+
+Quando um componente estiver pronto, usar esse prompt para limpar:
+
+```
+Revise esse componente e:
+- Remova todas as divs wrapper que existem só para estilo — aplique as classes direto no elemento semântico
+- Elimine classes Tailwind redundantes ou contraditórias no mesmo elemento
+- Substitua margin repetida nos filhos por gap no pai
+- Garanta máximo 3 níveis de aninhamento
+- Não altere o visual final — só a estrutura e as classes
+```

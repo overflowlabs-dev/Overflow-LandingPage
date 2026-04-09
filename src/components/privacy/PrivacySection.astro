@@ -1,0 +1,148 @@
+---
+import PrivacyRightsCard from './PrivacyRightsCard.astro'
+import circleOffIconUrl from '../../assets/icons/lucide-circle-off.svg?url'
+import chartColumnIconUrl from '../../assets/icons/lucide-chart-column.svg?url'
+import shieldIconUrl from '../../assets/icons/lucide-shield.svg?url'
+import eyeIconUrl from '../../assets/icons/lucide-eye.svg?url'
+import pencilIconUrl from '../../assets/icons/lucide-pencil.svg?url'
+import trashIconUrl from '../../assets/icons/lucide-trash-2.svg?url'
+
+const collectedData = [
+	{ label: 'Nome completo' },
+	{ label: 'E-mail' },
+	{ label: 'WhatsApp' },
+	{ label: 'Mensagem', suffix: 'enviada voluntariamente' },
+]
+
+const guarantees = [
+	{ iconUrl: circleOffIconUrl, text: 'Seus dados não são vendidos a terceiros.' },
+	{ iconUrl: chartColumnIconUrl, text: 'Não realizamos envios de marketing não solicitado.' },
+	{
+		iconUrl: shieldIconUrl,
+		text: 'O compartilhamento ocorre apenas com APIs de IA sob termos corporativos pagos, que garantem que os dados não sejam usados para treinamento de modelos globais.',
+	},
+]
+
+const rights = [
+	{ iconUrl: eyeIconUrl, label: 'Acesso' },
+	{ iconUrl: pencilIconUrl, label: 'Correção' },
+	{ iconUrl: trashIconUrl, label: 'Exclusão' },
+]
+
+const privacySections = [
+	{
+		key: 'intro',
+		title: '1. Introdução',
+		text: 'A Overflow Labs valoriza a sua privacidade. Esta Política de Privacidade descreve como tratamos as suas informações pessoais em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018). Ao utilizar nossos serviços, você concorda com a coleta e uso de informações de acordo com esta política.',
+	},
+	{
+		key: 'collected-data',
+		title: '2. Dados coletados',
+		text: 'Coletamos apenas os dados estritamente necessários para o atendimento inicial e processamento de solicitações:',
+	},
+	{
+		key: 'purpose',
+		title: '3. Finalidade',
+		text: 'Os dados fornecidos são utilizados exclusivamente para resposta a contatos e elaboração de orçamentos.',
+	},
+	{
+		key: 'storage',
+		title: '4. Armazenamento',
+		text: 'O armazenamento dos seus dados é temporário e ocorre apenas pelo tempo necessário para cumprir as finalidades citadas ou até que a exclusão seja solicitada pelo titular.',
+	},
+	{
+		key: 'rights',
+		title: '5. Direitos do titular',
+		text: 'Como titular dos dados, você possui o direito de solicitar a qualquer momento:',
+	},
+	{
+		key: 'contact',
+		title: '6. Contato',
+		text: 'Para qualquer dúvida sobre esta política ou sobre o tratamento de seus dados, envie um e-mail para:',
+	},
+] as const
+---
+
+<div class="contents">
+	{
+		privacySections.map((section) => (
+			<section>
+				<h2 class="font-headline text-3xl font-bold text-white">{section.title}</h2>
+				<div class="mt-4 space-y-4">
+					<p
+						class:list={[
+							'text-lg leading-relaxed text-on-surface md:text-xl',
+							section.key === 'intro' && 'max-w-4xl',
+						]}
+					>
+						{section.text}
+						{
+							section.key === 'contact' && (
+								<>
+									{' '}
+									<span class="font-mono text-white">contato@overflowlabs.com.br</span>
+								</>
+							)
+						}
+					</p>
+
+					{
+						section.key === 'collected-data' && (
+							<ul class="mt-5 grid gap-3 sm:grid-cols-2">
+								{
+									collectedData.map((item) => (
+										<li class="rounded-sm border border-outline-variant/30 bg-surface-container-low px-4 py-3 text-base text-on-surface md:text-lg">
+											<strong class="text-white">{item.label}</strong>
+											{item.suffix && ` ${item.suffix}`}
+										</li>
+									))
+								}
+							</ul>
+						)
+					}
+
+					{
+						section.key === 'purpose' && (
+							<>
+								<p class="text-base leading-relaxed text-on-surface md:text-lg">Garantimos que:</p>
+								<ul class="mt-4 space-y-3 text-base leading-relaxed text-on-surface md:text-lg">
+									{
+										guarantees.map((item) => (
+											<li class="flex items-start gap-3">
+												<img
+													src={item.iconUrl}
+													alt=""
+													class="mt-0.5 size-5 shrink-0 brightness-0 invert opacity-85"
+													aria-hidden="true"
+												/>
+												<span>{item.text}</span>
+											</li>
+										))
+									}
+								</ul>
+							</>
+						)
+					}
+
+					{
+						section.key === 'rights' && (
+							<>
+								<div class="mt-6 grid gap-4 sm:grid-cols-3">
+									{
+										rights.map((item) => (
+											<PrivacyRightsCard iconUrl={item.iconUrl} label={item.label} />
+										))
+									}
+								</div>
+								<p class="text-base leading-relaxed text-on-surface md:text-lg">
+									Para exercer seus direitos, entre em contato através do e-mail:
+								</p>
+								<p class="font-mono text-lg text-white">contato@overflowlabs.com.br</p>
+							</>
+						)
+					}
+				</div>
+			</section>
+		))
+	}
+</div>

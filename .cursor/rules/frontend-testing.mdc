@@ -1,0 +1,122 @@
+---
+description: Convenções de testes front-end (Vitest, Testing Library, Astro) alinhadas ao projeto
+globs:
+  - "**/*.test.ts"
+  - "**/*client*.ts"
+  - "**/*.astro"
+alwaysApply: false
+---
+
+# Stack e configuração
+
+- **Runner:** Vitest com `environment: 'jsdom'` e `getViteConfig()` de `astro/config` em `vitest.config.ts` (alinhado à [documentação de testes do Astro](https://docs.astro.build/pt-br/guides/testing/)).
+- **Descoberta:** apenas `src/**/*.test.ts` (ver `vitest.config.ts`).
+- **Setup global:** `vitest.setup.ts` importa `@testing-library/jest-dom/vitest` (matchers como `toBeInTheDocument`, `toHaveAttribute`).
+- **Bibliotecas:** `@testing-library/dom`, `@testing-library/user-event` quando houver interação.
+
+---
+
+# Onde colocar os testes
+
+- **Colocation:** preferir o ficheiro de teste **ao lado do código testado** (ex.: `ContactForm/ContactForm.test.ts` + `contact-form.client.ts` + `index.astro`, ou `sections/FaqSection/FaqSection.test.ts` + `faq-open-motion.client.ts` + `index.astro` na mesma pasta do componente).
+- **Nome:** `<ComponentName>.test.ts` ou `<feature>.test.ts` (ex.: `nav-active.test.ts` junto a `nav-active.ts`).
+- **Alternativa:** pasta `/tests` só se fizer sentido para integrações que não pertencem a um módulo único.
+
+---
+
+# Astro vs lógica testável
+
+- **Componentes `.astro`:** montar e testar o markup compilado com a Container API pode falhar (`NoMatchingRenderer`, limitações de bundler). Quando a UI tiver comportamento no cliente, **extrair a lógica para um módulo `.ts`** (ex.: `contact-form.client.ts`) e testar esse módulo.
+- **HTML de fixture:** usar um helper que gera **HTML mínimo que espelha o DOM real** (ids, `name`, labels, `role`, `aria-*`). Documentar num comentário no topo do teste que alterações no contrato Astro ↔ cliente exigem atualizar o helper.
+- **Módulos puros** (ex.: `nav-active.ts`): testar as funções exportadas com DOM simulado e mocks de `getBoundingClientRect` / `scrollY` quando necessário.
+
+---
+
+# Estrutura dos ficheiros de teste
+
+## `describe` e `it`
+
+- Agrupar por unidade: `describe('ContactForm', () => { ... })` ou `describe('nav-active (layout)', () => { ... })`.
+- Casos extra em `describe` separado quando for outra API (ex.: `describe('sectionDocumentTop', () => { ... })`).
+- Mensagens em inglês com padrão **`should ...`** (ex.: `should set aria-current only on the active link`).
+
+## Helpers (padrão recomendado)
+
+1. **`build…Html(opts?)`** — string HTML ou `innerHTML` da fixture; parametrizar variações (ex.: captcha ausente, access key vazia) em vez de duplicar markup.
+2. **`mount…Harness(opts?)`** — opcional: injeta no `document`, obtém referências (`form`, etc.), regista listeners via a API real (`initContactForm`, etc.) e devolve `{ …, cleanup }`.
+3. **Mocks isolados** — função `install…Mock(ref)` que devolve o spy, para fazer `mockRestore()` no `afterEach`.
+
+## Ciclo de vida e limpeza
+
+Sempre que o teste tocar no DOM ou em mocks globais:
+
+```ts
+afterEach(() => {
+  cleanup?.() // ex.: função devolvida por init*
+  document.body.replaceChildren()
+  vi.unstubAllGlobals()
+  vi.restoreAllMocks()
+})
+```
+
+- Chamar **`cleanup`** devolvido por APIs que registem listeners (`initContactForm` devolve `() => void`).
+- **`document.body.replaceChildren()`** garante DOM limpo entre testes (preferir a `innerHTML = ''` quando há nós ou estado residual).
+- Restaurar spies com **`mockRestore()`** no spy específico ou **`vi.restoreAllMocks()`** no fim.
+
+---
+
+# Testing Library e acessibilidade
+
+- Preferir **`screen.getByRole`**, **`getByLabelText`**, **`within(container).getByRole`** com **nome acessível** (ex.: `getByRole('navigation', { name: 'Principal' })`).
+- Evitar **`querySelector` / `getElementById`** exceto quando for infraestrutura da fixture (ex.: obter `#contact-form` dentro do harness) ou inspeção pontual após interação.
+- Validar **contratos a11y** relevantes: `role="status"`, `aria-live`, `aria-current`, associação label ↔ control.
+- Interações: **`@testing-library/user-event`** (`userEvent.setup()`, `click`, `type`).
+
+---
+
+# Comportamento a cobrir (checklist)
+
+Adaptar ao tipo de código; não forçar secções que não se aplicam.
+
+1. **Caminho feliz** — fluxo principal completa com sucesso.
+2. **Validação / erros** — entradas inválidas, campos obrigatórios, limites de tamanho, estados impossíveis (ex.: sem captcha, sem access key).
+3. **Integrações externas** — `vi.stubGlobal('fetch', …)` com respostas `success: true/false` e rejeição de rede; mensagens genéricas ao utilizador (sem vazar detalhes do servidor).
+4. **Condicionais** — ramos distintos da UI ou da lógica (ex.: só nav principal recebe `aria-current`).
+5. **Edge cases** — elementos do DOM em falta não devem lançar se a produção for defensiva.
+
+---
+
+# Mocks e spies (Vitest)
+
+- **`vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect')`** quando o código depender de geometria.
+- **`Object.defineProperty(window, 'scrollY', { get, configurable: true })`** para simular scroll.
+- **`vi.fn()` / `vi.stubGlobal`** — restaurar sempre no `afterEach`.
+
+---
+
+# Imports típicos
+
+Ajustar ao ficheiro; não é obrigatório importar `render` se não houver componente React/Vue.
+
+```ts
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { screen, within } from '@testing-library/dom'
+import userEvent from '@testing-library/user-event'
+```
+
+---
+
+# Proibições e qualidade
+
+- Não usar **snapshots** sem necessidade clara.
+- Não testar **detalhes internos** (implementação privada) em detrimento do comportamento observável.
+- Não **duplicar** o mesmo cenário com asserts redundantes.
+- Nomes de teste **descritivos** (`should show generic error when fetch fails`).
+
+---
+
+# Saída esperada ao gerar testes
+
+- Código **completo** e **executável** com `npm test`.
+- Helpers e `afterEach` alinhados a este documento quando houver DOM ou mocks.
+- Comentário breve no topo quando o teste **não** importa `.astro` e depende de HTML espelhado.

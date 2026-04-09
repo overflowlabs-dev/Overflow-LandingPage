@@ -1,0 +1,93 @@
+---
+description: Regras de segurança para o projeto Astro SSG landing page
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Segurança
+
+Este é um site estático (SSG) sem backend próprio. As preocupações de segurança são focadas em formulários, variáveis de ambiente, dependências e headers HTTP.
+
+## Variáveis de Ambiente
+
+- **Nunca** expor chaves de API diretamente no código
+- Variáveis públicas (expostas ao browser) usam prefixo `PUBLIC_`: `PUBLIC_FORM_ENDPOINT`
+- Variáveis privadas (só no build) sem prefixo: `FORM_SECRET_KEY`
+- Sempre declarar variáveis esperadas no arquivo `.env.example` (sem valores reais)
+- O arquivo `.env` deve estar no `.gitignore` — nunca commitar
+
+```
+# .env.example
+PUBLIC_FORM_ENDPOINT=
+PUBLIC_WHATSAPP_NUMBER=
+PUBLIC_INSTAGRAM_URL=
+```
+
+## Formulário de Contato
+
+- Usar  Web3Forms — nunca processar no cliente
+- Sempre adicionar honeypot field para evitar spam:
+
+```astro
+<!-- Campo oculto anti-spam -->
+<input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+```
+
+- Nunca exibir mensagens de erro detalhadas do servidor ao usuário
+- Sempre validar no cliente antes de enviar (HTML5 + JS), mas nunca confiar só nisso
+- Usar `rel="noopener noreferrer"` em todos os links externos
+
+## Links Externos (Instagram, WhatsApp)
+
+- Todo `<a>` para link externo deve ter `target="_blank" rel="noopener noreferrer"`
+- Nunca montar URLs dinamicamente com dados do usuário sem sanitização
+
+```astro
+<!-- Correto -->
+<a href="https://wa.me/5541999999999" target="_blank" rel="noopener noreferrer">
+  WhatsApp
+</a>
+
+<!-- Errado -->
+<a href={`https://wa.me/${numero}`} target="_blank">WhatsApp</a>
+```
+
+## Headers de Segurança
+
+Adicionar no `astro.config.mjs` se usar adapter com suporte a headers, ou configurar no servidor/CDN (Netlify, Vercel):
+
+```
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+```
+
+## Dependências
+
+- Sempre revisar pacotes antes de instalar: preferir pacotes com manutenção ativa e muitos downloads
+- Rodar `npm audit` antes de cada deploy
+- Nunca instalar pacotes desnecessários — menos dependências = menor superfície de ataque
+
+## Checklist antes do Deploy
+
+- [ ] `.env` está no `.gitignore`
+- [ ] Nenhuma chave de API hardcoded no código
+- [ ] Todos os links externos têm `rel="noopener noreferrer"`
+- [ ] Formulário tem honeypot
+- [ ] `npm audit` sem vulnerabilidades críticas
+- [ ] Headers de segurança configurados no CDN/host
+
+## Sanitização de Inputs
+
+- Nunca inserir dados do usuário diretamente no DOM sem sanitização
+- Evitar uso de `innerHTML`
+- Preferir `textContent` ou bindings seguros
+
+## CSP
+Content-Security-Policy:
+  default-src 'self';
+  img-src 'self' https: data:;
+  script-src 'self' https://cdn.jsdelivr.net;
+  style-src 'self' 'unsafe-inline' https:;
+  connect-src 'self' https:;

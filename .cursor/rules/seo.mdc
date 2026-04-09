@@ -1,0 +1,190 @@
+---
+description: Regras de SEO para landing page Astro SSG — meta tags, Open Graph, JSON-LD, sitemap e acessibilidade
+globs: ["**/*.astro", "astro.config.mjs"]
+alwaysApply: false
+---
+
+# SEO
+
+## Configuração Obrigatória no astro.config.mjs
+
+O campo `site` é obrigatório para o sitemap e canonical URLs funcionarem:
+
+```js
+// astro.config.mjs
+import { defineConfig } from 'astro/config'
+import sitemap from '@astrojs/sitemap'
+import tailwind from '@astrojs/tailwind'
+
+export default defineConfig({
+  site: 'https://seudominio.com.br', // URL de produção — obrigatório
+  integrations: [
+    tailwind(),
+    sitemap({
+      filter: (page) => page !== 'https://seudominio.com.br/obrigado/', // excluir páginas de confirmação
+    }),
+  ],
+})
+```
+
+Instalar o sitemap: `npx astro add sitemap`
+
+## BaseLayout.astro — Head Completo
+
+Todo SEO fica centralizado no `BaseLayout.astro`. A página passa as props, o layout injeta as tags:
+
+```astro
+---
+interface Props {
+  title: string
+  description: string
+  ogImage?: string // URL absoluta da imagem OG (padrão: /og-image.png)
+  canonical?: string
+}
+
+const {
+  title,
+  description,
+  ogImage = '/og-image.png',
+  canonical = Astro.url.href,
+} = Astro.props
+
+const ogImageAbsoluto = new URL(ogImage, Astro.site).href
+
+// JSON-LD para landing page pessoal
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Seu Nome',
+  url: Astro.site,
+  sameAs: [
+    'https://instagram.com/seuhandle',
+    'https://wa.me/5541999999999',
+  ],
+  description: description,
+}
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Básico -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageAbsoluto} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pt_BR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbsoluto} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- JSON-LD Estruturado -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+```
+
+## Uso nas Páginas
+
+```astro
+---
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Seu Nome — Título profissional | Cidade"
+  description="Descrição clara do que você faz e para quem. Entre 120-160 caracteres. Inclua sua especialidade."
+>
+  <!-- conteúdo da página -->
+</BaseLayout>
+```
+
+## Regras de Conteúdo SEO
+
+**Title tag:**
+- Entre 50-60 caracteres — mais que isso é truncado no Google
+- Formato: `Serviço ou Nome — Especialidade | Localização`
+- Nunca repetir a mesma title em páginas diferentes
+
+**Meta description:**
+- Entre 120-160 caracteres
+- Deve descrever claramente o que o visitante vai encontrar
+- Inclua uma chamada para ação sutil (ex: "Entre em contato")
+- Google pode reescrever se não for relevante ao conteúdo
+
+**Open Graph image (`/public/og-image.png`):**
+- Tamanho obrigatório: **1200x630px**
+- Formato: PNG ou JPG (não WebP — nem todos os apps suportam)
+- Inclua seu nome e/ou logo visíveis na imagem
+- Essa imagem aparece quando alguém compartilha seu link no WhatsApp, Instagram, LinkedIn
+
+## HTML Semântico (impacta SEO)
+
+- Usar apenas **um `<h1>`** por página — deve ser o título principal
+- Hierarquia correta: `h1 → h2 → h3` (nunca pular níveis)
+- Todos os `<img>` e `<Image>` devem ter `alt` descritivo
+- Usar tags semânticas: `<header>`, `<main>`, `<section>`, `<footer>`, `<nav>`, `<article>`
+
+```astro
+<!-- Correto -->
+<main>
+  <section aria-label="Sobre mim">
+    <h1>Seu Nome — Designer UX em Curitiba</h1>
+    <p>...</p>
+  </section>
+</main>
+
+<!-- Errado -->
+<div>
+  <div>
+    <h3>Sobre mim</h3>
+  </div>
+</div>
+```
+
+## robots.txt
+
+Criar `public/robots.txt`:
+
+```
+User-agent: *
+Allow: /
+
+Sitemap: https://seudominio.com.br/sitemap-index.xml
+```
+
+## Checklist SEO antes do Deploy
+
+- [ ] `site` configurado no `astro.config.mjs`
+- [ ] `@astrojs/sitemap` instalado e gerando `/sitemap-index.xml`
+- [ ] `public/robots.txt` criado com referência ao sitemap
+- [ ] `public/og-image.png` criado em 1200x630px
+- [ ] Title entre 50-60 caracteres
+- [ ] Description entre 120-160 caracteres
+- [ ] Apenas um `<h1>` por página
+- [ ] Todos os `<img>` com `alt`
+- [ ] JSON-LD com dados corretos (nome, URL, redes sociais)
+- [ ] Testar preview do WhatsApp/LinkedIn com: https://www.opengraph.xyz
+- [ ] Testar JSON-LD com: https://search.google.com/test/rich-results
+- [ ] Submeter sitemap no Google Search Console após deploy

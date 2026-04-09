@@ -1,0 +1,19 @@
+# build
+dist/
+
+# deps
+node_modules/
+
+# env
+.env
+.env.production
+.env.local
+
+# astro
+.astro/
+
+# editor
+.DS_Store
+
+# scratch / backlog local
+*.temp.md

@@ -1,0 +1,124 @@
+---
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const iconStyle = "font-variation-settings: 'FILL' 1, 'wght' 200, 'GRAD' 0, 'opsz' 24"
+---
+
+<section
+	id="protocolo"
+	data-animate-trust
+	class:list={[
+		'border-y border-outline-variant/10 bg-surface-container-lowest px-8 py-32',
+		className,
+	]}
+	aria-labelledby="protocolo-heading"
+>
+	<div class="mx-auto flex max-w-screen-2xl flex-col items-center gap-16 md:flex-row">
+		<div data-trust-copy class="flex-1 space-y-6 opacity-0">
+			<h2
+				id="protocolo-heading"
+				class="font-headline text-4xl font-bold leading-none tracking-tighter text-white md:text-6xl"
+				style="font-size: var(--ols-text-section-lg)"
+			>
+				Privacidade de <br />
+				<span class="metallic-text-shine">Nível Enterprise</span>
+			</h2>
+			<p
+				class="max-w-md font-light text-lg text-secondary"
+				style="font-size: var(--ols-text-body-lg)"
+			>
+				Segurança não é uma opção, é a fundação de cada fluxo que construímos.
+			</p>
+		</div>
+		<ul class="grid flex-1 grid-cols-1 gap-8 sm:grid-cols-3">
+			<li data-trust-pillar class="space-y-4 opacity-0">
+				<div class="flex items-center gap-2">
+					<span
+						class="material-symbols-outlined text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]"
+						style={iconStyle}
+						aria-hidden="true">shield_lock</span
+					>
+					<span
+						class="font-label text-xs font-bold uppercase tracking-widest text-white"
+						style="font-size: var(--ols-text-caption)"
+					>
+						Dados Protegidos
+					</span>
+				</div>
+				<p class="text-xs leading-relaxed text-secondary/60">
+					Criptografia end-to-end em todas as camadas de transição de dados.
+				</p>
+			</li>
+			<li data-trust-pillar class="space-y-4 opacity-0">
+				<div class="flex items-center gap-2">
+					<span
+						class="material-symbols-outlined text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]"
+						style={iconStyle}
+						aria-hidden="true">vpn_lock</span
+					>
+					<span
+						class="font-label text-xs font-bold uppercase tracking-widest text-white"
+						style="font-size: var(--ols-text-caption)"
+					>
+						Túneis Seguros
+					</span>
+				</div>
+				<p class="text-xs leading-relaxed text-secondary/60">
+					Conexões isoladas que garantem a integridade das suas informações.
+				</p>
+			</li>
+			<li data-trust-pillar class="space-y-4 opacity-0">
+				<div class="flex items-center gap-2">
+					<span
+						class="material-symbols-outlined text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]"
+						style={iconStyle}
+						aria-hidden="true">cloud_done</span
+					>
+					<span
+						class="font-label text-xs font-bold uppercase tracking-widest text-white"
+						style="font-size: var(--ols-text-caption)"
+					>
+						Hospedagem Soberana
+					</span>
+				</div>
+				<p class="text-xs leading-relaxed text-secondary/60">
+					Opções de implantação local ou em nuvens privadas exclusivas.
+				</p>
+			</li>
+		</ul>
+	</div>
+</section>
+
+<script>
+	import { inView, domReveal, stagger } from '../../lib/animate-dom'
+	import { prefersReducedMotion } from '../../lib/prefers-reduced-motion'
+
+	const root = document.querySelector('[data-animate-trust]')
+	if (root) {
+		if (prefersReducedMotion()) {
+			root.querySelectorAll('[data-trust-copy], [data-trust-pillar]').forEach((el) => {
+				el.classList.remove('opacity-0')
+			})
+		} else {
+			inView(
+				root,
+				() => {
+					const copy = root.querySelector('[data-trust-copy]')
+					const pillars = root.querySelectorAll('[data-trust-pillar]')
+					if (copy) {
+						domReveal(copy, { opacity: [0, 1], y: [28, 0] }, { duration: 0.6 })
+					}
+					domReveal(pillars, { opacity: [0, 1], y: [24, 0] }, {
+						duration: 0.52,
+						delay: stagger(0.1, { startDelay: 0.12 }),
+					})
+				},
+				{ amount: 0.12, margin: '0px 0px -8% 0px' },
+			)
+		}
+	}
+</script>

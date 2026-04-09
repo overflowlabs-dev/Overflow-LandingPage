@@ -1,0 +1,41 @@
+---
+interface Props {
+	href?: string
+	type?: 'button' | 'submit' | 'reset'
+	variant?: 'silver' | 'primary'
+	class?: string
+}
+
+const {
+	href,
+	type = 'button',
+	variant = 'silver',
+	class: className = '',
+	...rest
+} = Astro.props as Props & Record<string, unknown>
+
+const variantClass =
+	variant === 'primary'
+		? 'border border-white/20 bg-primary text-on-primary'
+		: 'btn-silver text-on-primary'
+---
+
+{
+	href ? (
+		<a
+			href={href}
+			class:list={['rounded-sm font-headline font-bold tracking-tight', variantClass, className]}
+			{...rest}
+		>
+			<slot />
+		</a>
+	) : (
+		<button
+			type={type}
+			class:list={['rounded-sm font-headline font-bold tracking-tight cursor-pointer', variantClass, className]}
+			{...rest}
+		>
+			<slot />
+		</button>
+	)
+}

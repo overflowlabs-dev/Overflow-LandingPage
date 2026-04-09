@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import GrainOverlay from '../components/GrainOverlay.astro'
+import BottomNavbar from '../components/layout/BottomNavbar.astro'
+import SiteHeader from '../components/layout/SiteHeader.astro'
+import HeroSection from '../components/sections/HeroSection.astro'
+import SolutionsSection from '../components/sections/SolutionsSection.astro'
+import AboutSection from '../components/sections/AboutSection.astro'
+import TrustSection from '../components/sections/TrustSection.astro'
+import ContactSection from '../components/sections/ContactSection.astro'
+import FaqSection from '../components/sections/FaqSection/index.astro'
+import SiteFooter from '../components/layout/SiteFooter.astro'
+import FloatingSocialButtons from '../components/layout/FloatingSocialButtons.astro'
+
+const title = 'Overflow Labs — Automação, IA e desenvolvimento sob medida'
+const description =
+	'Ecossistemas de IA, sistemas customizados e landing pages de alta conversão. Automatize, integre e transborde com a Overflow Labs.'
+---
+
+<BaseLayout title={title} description={description}>
+	<GrainOverlay />
+	<SiteHeader />
+	<main>
+		<HeroSection />
+		<SolutionsSection />
+		<AboutSection />
+		<TrustSection />
+		<FaqSection />
+		<ContactSection />
+	</main>
+	<SiteFooter class="max-md:pb-28" />
+	<BottomNavbar />
+	<FloatingSocialButtons />
+</BaseLayout>

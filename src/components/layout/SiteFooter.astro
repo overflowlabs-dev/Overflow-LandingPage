@@ -1,0 +1,79 @@
+---
+import { getPublicEnv } from '../../lib/env-provider.mjs'
+
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const env = getPublicEnv(import.meta.env)
+const instagramUrl = env.PUBLIC_INSTAGRAM_URL
+const whatsappUrl = env.PUBLIC_WHATSAPP_URL
+const igExt = instagramUrl.startsWith('http')
+const waExt = whatsappUrl.startsWith('http')
+---
+
+<footer
+	data-animate-footer
+	class:list={['w-full border-t border-white/10 px-8 py-12', className]}
+	style="background-color: var(--ols-color-footer-bg)"
+>
+	<div
+		data-footer-inner
+		class="mx-auto flex max-w-screen-2xl flex-col items-center justify-between gap-8 font-body uppercase tracking-widest md:flex-row"
+		style="font-size: var(--ols-text-footer)"
+	>
+		<a
+			href="#home"
+			data-footer-chunk
+			class="inline-flex shrink-0 items-center opacity-0"
+		>
+			<img
+				src="/logo.svg"
+				alt="Overflow Labs"
+				width="160"
+				height="84"
+				class="h-7 w-auto max-w-[min(100%,10rem)] object-contain md:h-8"
+			/>
+		</a>
+		<p
+			data-footer-chunk
+			class="text-center text-[color:var(--ols-color-link-muted-footer)] opacity-0 md:text-left"
+		>
+			© 2026 OVERFLOW LABS. AUTOMATIZE. INTEGRE. TRANSBORDE.
+		</p>
+		<nav
+			data-footer-chunk
+			class="flex gap-8 text-[color:var(--ols-color-link-muted-footer)] opacity-0 "
+			aria-label="Rodapé"
+		>
+			<a href="/privacidade" class="transition-[opacity,transform] duration-100 hover:opacity-100 hover:underline hover:text-white transition-colors"
+				>Política de Privacidade</a>
+		</nav>
+	</div>
+</footer>
+
+<script>
+	import { inView, domReveal, stagger } from '../../lib/animate-dom'
+	import { prefersReducedMotion } from '../../lib/prefers-reduced-motion'
+
+	const root = document.querySelector('[data-animate-footer]')
+	if (root) {
+		if (prefersReducedMotion()) {
+			root.querySelectorAll('[data-footer-chunk]').forEach((el) => el.classList.remove('opacity-0'))
+		} else {
+			inView(
+				root,
+				() => {
+					const chunks = root.querySelectorAll('[data-footer-chunk]')
+					domReveal(chunks, { opacity: [0, 1], y: [12, 0] }, {
+						duration: 0.5,
+						delay: stagger(0.08),
+					})
+				},
+				{ amount: 0.2 },
+			)
+		}
+	}
+</script>

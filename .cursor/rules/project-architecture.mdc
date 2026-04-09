@@ -1,0 +1,42 @@
+---
+description: Estrutura de pastas e arquitetura do projeto Astro landing page
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Arquitetura do Projeto
+
+Este é um site estático (SSG) feito com Astro + TailwindCSS. É uma landing page pessoal com formulário de contato e links sociais.
+
+## Estrutura de Pastas
+
+```
+src/
+├── components/        # Componentes reutilizáveis
+│   ├── layout/        # Casca do site (header, footer, nav inferior) — não são seções de conteúdo
+│   ├── ui/            # Componentes genéricos (Button, Input, Badge...)
+│   └── sections/      # Seções de conteúdo da landing (Hero, Solutions, Contact...)
+├── layouts/
+│   └── BaseLayout.astro  # Layout base: <html>, head, meta, slot da página
+├── pages/
+│   └── index.astro    # Única página da landing page
+├── styles/
+│   └── global.css     # Reset, variáveis CSS e estilos globais
+└── assets/
+    ├── images/        # Imagens otimizadas (use .webp sempre que possível)
+    └── icons/         # SVGs de ícones
+
+public/
+├── favicon.ico
+└── og-image.png       # Imagem para Open Graph (1200x630px)
+```
+
+## Regras de Arquitetura
+
+- **Nunca** coloque lógica de negócio diretamente em `pages/`
+- Cada **seção de conteúdo** da landing deve ser um componente em `src/components/sections/`
+- **Casca global** (top bar, rodapé, bottom nav): `src/components/layout/` — não misturar com `sections/`
+- Componentes de UI genéricos ficam em `src/components/ui/`
+- Imagens usadas no código ficam em `src/assets/`; arquivos públicos diretos ficam em `public/`
+- O arquivo `BaseLayout.astro` é obrigatório e deve envolver todas as páginas
+- Estilos globais apenas em `src/styles/global.css`; prefira Tailwind inline nos componentes

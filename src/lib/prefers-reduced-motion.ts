@@ -1,0 +1,5 @@
+/** Retorna true quando o usuário prefere menos movimento (acessibilidade). */
+export function prefersReducedMotion(): boolean {
+	if (typeof window === 'undefined') return true
+	return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}

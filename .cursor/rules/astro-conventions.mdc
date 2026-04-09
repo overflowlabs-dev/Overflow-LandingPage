@@ -1,0 +1,170 @@
+---
+description: Convenções e boas práticas para escrever componentes Astro (baseado na doc oficial v5+)
+globs: ["**/*.astro"]
+alwaysApply: false
+---
+
+# Convenções Astro
+
+## Estrutura de Componente
+
+Todo componente `.astro` segue essa ordem:
+
+```astro
+---
+// 1. Imports
+import { Image } from 'astro:assets'
+import BotaoContato from '../components/ui/BotaoContato.astro'
+import minhaFoto from '../assets/images/foto.jpg'
+
+// 2. Props tipadas com interface
+interface Props {
+  titulo: string
+  descricao?: string
+  class?: string // sempre aceitar class para composição com Tailwind
+}
+
+// 3. Desestruturação com defaults
+const { titulo, descricao = 'Valor padrão', class: className } = Astro.props
+---
+
+<!-- 4. Template HTML -->
+<section class={className}>
+  <h2>{titulo}</h2>
+  {descricao && <p>{descricao}</p>}
+  <slot /> <!-- conteúdo filho padrão -->
+</section>
+
+<!-- 5. Script client-side (só quando necessário) -->
+<script>
+  // Código que roda no navegador
+  // Não tem acesso ao frontmatter diretamente
+</script>
+
+<!-- 6. Estilos (só se necessário; prefira Tailwind) -->
+<style>
+  /* Escopo automático — não vaza para fora do componente */
+</style>
+```
+
+## Props
+
+- Sempre tipar com `interface Props` no frontmatter
+- Sempre aceitar `class?: string` em componentes de UI para permitir customização externa via Tailwind
+- Desestruturar renomeando: `class: className` (pois `class` é palavra reservada em JS)
+- Props com defaults são definidos na desestruturação, não na interface
+
+```astro
+---
+interface Props {
+  variante?: 'primario' | 'secundario'
+  class?: string
+}
+const { variante = 'primario', class: className = '' } = Astro.props
+---
+<button class={`btn-base ${variante === 'primario' ? 'bg-blue-600' : 'bg-gray-200'} ${className}`}>
+  <slot />
+</button>
+```
+
+## Slots
+
+- `<slot />` renderiza o conteúdo filho passado ao componente
+- Slots nomeados permitem múltiplas áreas de conteúdo
+- Slots aceitam fallback content quando nenhum filho é passado
+- Named slots devem ser filhos diretos do componente — não podem ser aninhados
+
+```astro
+<!-- Layout.astro -->
+<header>
+  <slot name="header">
+    <p>Header padrão</p> <!-- fallback -->
+  </slot>
+</header>
+<main>
+  <slot /> <!-- slot padrão -->
+</main>
+
+<!-- Uso -->
+<Layout>
+  <h1 slot="header">Meu título</h1>
+  <p>Conteúdo principal</p>
+</Layout>
+```
+
+## Scripts Client-Side
+
+- `<script>` no Astro é **bundled** por padrão — o Astro processa e otimiza
+- Use `<script>` para interatividade real no navegador: submit de formulário, animações, eventos
+- Scripts **não têm acesso** direto às variáveis do frontmatter — passe dados via `data-*` attributes
+
+```astro
+---
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT
+---
+
+<!-- Passe variáveis do servidor pro client via data-* -->
+<form id="contato" data-endpoint={endpoint}>
+  ...
+</form>
+
+<script>
+  const form = document.getElementById('contato') as HTMLFormElement
+  const endpoint = form.dataset.endpoint
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const data = new FormData(form)
+    await fetch(endpoint!, { method: 'POST', body: data })
+  })
+</script>
+```
+
+- Use `<script is:inline>` apenas quando precisar que o script seja inserido literalmente sem bundling (raro)
+- Nunca use `<script>` para lógica que pode ser feita no frontmatter (build time)
+
+## Imagens
+
+- Sempre usar `<Image>` de `astro:assets` para imagens em `src/assets/` — otimização automática (WebP, lazy load, dimensões)
+- Imagens em `public/` são servidas diretamente sem otimização — usar apenas para `favicon`, `og-image`, etc.
+
+```astro
+---
+import { Image } from 'astro:assets'
+import minhaFoto from '../assets/images/foto.jpg'
+---
+
+<!-- Correto: otimizado -->
+<Image src={minhaFoto} alt="Minha foto" width={400} height={400} />
+
+<!-- Evitar para imagens locais -->
+<img src="/imagem.jpg" alt="..." />
+```
+
+## Variáveis de Ambiente
+
+- Usar `import.meta.env` — nunca `process.env`
+- Variáveis públicas (acessíveis no client): prefixo `PUBLIC_`
+- Variáveis privadas (só no build): sem prefixo
+
+```astro
+---
+const chavePrivada = import.meta.env.MINHA_CHAVE
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT
+---
+```
+
+## Este projeto é SSG
+
+- **Não** usar `export const prerender = false` — tudo é pré-renderizado por padrão
+- Sem `Astro.request`, `Astro.cookies`, `Astro.locals` ou APIs de servidor
+- Formulários usam serviços externos (Web3Forms) com `fetch` via `<script>` client-side
+- Sem API routes — é site puramente estático
+
+## Nomenclatura
+
+- Componentes: `PascalCase.astro` → `HeroSection.astro`, `BotaoContato.astro`
+- Páginas: `kebab-case.astro` → `index.astro`, `obrigado.astro`
+- Layouts: `PascalCase.astro` com sufixo `Layout` → `BaseLayout.astro`
+- Props e variáveis: `camelCase`
+- Classes CSS customizadas: `kebab-case`

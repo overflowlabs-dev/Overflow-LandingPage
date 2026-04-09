@@ -1,0 +1,412 @@
+@import "tailwindcss";
+@config "../../tailwind.config.mjs";
+
+/*
+ * Overflow Labs — design system (Stitch / Material tokens)
+ * Use em componentes: utilitários Tailwind (bg-background, text-on-surface, font-headline)
+ * ou CSS bruto: var(--ols-color-background), var(--ols-text-section), etc.
+ */
+
+:root {
+	/* ——— Cores (alias semântico para CSS customizado) ——— */
+	--ols-color-background: #131313;
+	--ols-color-surface: #131313;
+	--ols-color-surface-dim: #131313;
+	--ols-color-surface-bright: #3a3939;
+	--ols-color-surface-container-lowest: #0e0e0e;
+	--ols-color-surface-container-low: #1c1b1b;
+	--ols-color-surface-container: #201f1f;
+	--ols-color-surface-container-high: #2a2a2a;
+	--ols-color-surface-container-highest: #353534;
+	--ols-color-surface-variant: #353534;
+	--ols-color-on-background: #e5e2e1;
+	--ols-color-on-surface: #e5e2e1;
+	--ols-color-on-surface-variant: #c6c6c6;
+	--ols-color-inverse-surface: #e5e2e1;
+	--ols-color-inverse-on-surface: #313030;
+	--ols-color-outline: #919191;
+	--ols-color-outline-variant: #474747;
+	--ols-color-surface-tint: #c6c6c6;
+	--ols-color-primary: #e2e2e2;
+	--ols-color-on-primary: #1a1c1c;
+	--ols-color-primary-container: #d4d4d4;
+	--ols-color-on-primary-container: #000000;
+	--ols-color-primary-fixed: #5d5e5f;
+	--ols-color-primary-fixed-dim: #464747;
+	--ols-color-on-primary-fixed: #ffffff;
+	--ols-color-on-primary-fixed-variant: #e3e2e2;
+	--ols-color-secondary: #b8c8da;
+	--ols-color-on-secondary: #0d1d2a;
+	--ols-color-secondary-container: #394857;
+	--ols-color-on-secondary-container: #d4e4f6;
+	--ols-color-secondary-fixed: #b8c8da;
+	--ols-color-secondary-fixed-dim: #9dadbe;
+	--ols-color-on-secondary-fixed: #0d1d2a;
+	--ols-color-on-secondary-fixed-variant: #2d3d4b;
+	--ols-color-tertiary: #e2e2e2;
+	--ols-color-on-tertiary: #1a1c1c;
+	--ols-color-tertiary-container: #909191;
+	--ols-color-on-tertiary-container: #000000;
+	--ols-color-tertiary-fixed: #5d5f5f;
+	--ols-color-tertiary-fixed-dim: #454747;
+	--ols-color-on-tertiary-fixed: #ffffff;
+	--ols-color-on-tertiary-fixed-variant: #e2e2e2;
+	--ols-color-error: #ffb4ab;
+	--ols-color-on-error: #690005;
+	--ols-color-error-container: #93000a;
+	--ols-color-on-error-container: #ffdad6;
+	--ols-color-inverse-primary: #5d5e5f;
+	--ols-color-white: #ffffff;
+	--ols-color-nav-bg: rgb(19 19 19 / 0.8);
+	--ols-color-footer-bg: #0e0e0e;
+	--ols-color-link-muted: rgb(184 200 218 / 0.6);
+	--ols-color-link-muted-footer: rgb(184 200 218 / 0.4);
+
+	/* ——— Tipografia (tamanhos — alinhados ao Stitch) ——— */
+	--ols-text-display: clamp(3rem, 10vw, 6rem);
+	--ols-text-display-line-height: 0.9;
+	--ols-text-section: clamp(2.25rem, 5vw, 3rem);
+	--ols-text-section-line-height: 1;
+	--ols-text-section-lg: clamp(2.5rem, 5vw, 4.5rem);
+	--ols-text-cta-headline: clamp(3rem, 6vw, 4.5rem);
+	--ols-text-card-title: 1.5rem;
+	--ols-text-card-title-line-height: 1.2;
+	--ols-text-lead: 1.25rem;
+	--ols-text-lead-line-height: 1.625;
+	--ols-text-sublead: 1.5rem;
+	--ols-text-body-lg: 1.125rem;
+	--ols-text-body: 1rem;
+	--ols-text-caption: 0.875rem;
+	--ols-text-nav: 0.875rem;
+	--ols-text-button: 1.125rem;
+	--ols-text-eyebrow: 0.75rem;
+	--ols-text-eyebrow-tracking: 0.3em;
+	--ols-text-label: 0.625rem;
+	--ols-text-label-tracking: 0.2em;
+	--ols-text-footer: 0.75rem;
+	--ols-text-faq-question: clamp(1.125rem, 2vw, 1.25rem);
+
+	/* ——— Fontes ——— */
+	--ols-font-headline: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+	--ols-font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+	--ols-font-label: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+	/* ——— Raios (Stitch extend) ——— */
+	--ols-radius-sm: 0.125rem;
+	--ols-radius-md: 0.25rem;
+	--ols-radius-lg: 0.5rem;
+	--ols-radius-pill: 0.75rem;
+
+	/* ——— Sombras & efeitos ——— */
+	--ols-shadow-nav: 0 8px 32px rgba(0, 0, 0, 0.5);
+	--ols-shadow-glass: 0 0 15px rgba(255, 255, 255, 0.05);
+	--ols-shadow-glass-hover: 0 0 25px rgba(255, 255, 255, 0.1);
+	--ols-shadow-btn-silver: 0 4px 15px rgba(255, 255, 255, 0.2);
+	--ols-shadow-btn-silver-hover: 0 6px 20px rgba(255, 255, 255, 0.3);
+	--ols-shadow-progress-glow: 0 0 10px rgba(255, 255, 255, 0.2);
+	--ols-blur-glass: 20px;
+	--ols-blur-nav: 24px;
+	--ols-border-glass: rgba(198, 198, 198, 0.3);
+	--ols-border-glass-hover: rgba(255, 255, 255, 0.6);
+	--ols-bg-glass: rgba(255, 255, 255, 0.03);
+	--ols-bg-glass-input: rgba(255, 255, 255, 0.05);
+
+	/* ——— Gradientes metálicos ——— */
+	--ols-gradient-silver-bar: linear-gradient(
+		135deg,
+		#f8f9fa 0%,
+		#e9ecef 25%,
+		#adb5bd 50%,
+		#dee2e6 75%,
+		#f8f9fa 100%
+	);
+	--ols-gradient-silver-text: linear-gradient(
+		to right,
+		#919191 20%,
+		#ffffff 40%,
+		#ffffff 60%,
+		#919191 80%
+	);
+	--ols-gradient-btn-silver: linear-gradient(145deg, #ffffff 0%, #c6c6c6 100%);
+	--ols-gradient-btn-silver-hover: linear-gradient(145deg, #c6c6c6 0%, #ffffff 100%);
+
+	/* ——— Motion ——— */
+	--ols-ease-silver: cubic-bezier(0.4, 0, 0.2, 1);
+	--ols-duration-fast: 0.3s;
+	--ols-duration-glass: 0.4s;
+	--ols-z-grain: 9999;
+}
+
+@theme {
+	/* Cores → bg-*, text-*, border-* */
+	--color-background: var(--ols-color-background);
+	--color-surface: var(--ols-color-surface);
+	--color-surface-dim: var(--ols-color-surface-dim);
+	--color-surface-bright: var(--ols-color-surface-bright);
+	--color-surface-container-lowest: var(--ols-color-surface-container-lowest);
+	--color-surface-container-low: var(--ols-color-surface-container-low);
+	--color-surface-container: var(--ols-color-surface-container);
+	--color-surface-container-high: var(--ols-color-surface-container-high);
+	--color-surface-container-highest: var(--ols-color-surface-container-highest);
+	--color-surface-variant: var(--ols-color-surface-variant);
+	--color-on-background: var(--ols-color-on-background);
+	--color-on-surface: var(--ols-color-on-surface);
+	--color-on-surface-variant: var(--ols-color-on-surface-variant);
+	--color-inverse-surface: var(--ols-color-inverse-surface);
+	--color-inverse-on-surface: var(--ols-color-inverse-on-surface);
+	--color-outline: var(--ols-color-outline);
+	--color-outline-variant: var(--ols-color-outline-variant);
+	--color-surface-tint: var(--ols-color-surface-tint);
+	--color-primary: var(--ols-color-primary);
+	--color-on-primary: var(--ols-color-on-primary);
+	--color-primary-container: var(--ols-color-primary-container);
+	--color-on-primary-container: var(--ols-color-on-primary-container);
+	--color-primary-fixed: var(--ols-color-primary-fixed);
+	--color-primary-fixed-dim: var(--ols-color-primary-fixed-dim);
+	--color-on-primary-fixed: var(--ols-color-on-primary-fixed);
+	--color-on-primary-fixed-variant: var(--ols-color-on-primary-fixed-variant);
+	--color-secondary: var(--ols-color-secondary);
+	--color-on-secondary: var(--ols-color-on-secondary);
+	--color-secondary-container: var(--ols-color-secondary-container);
+	--color-on-secondary-container: var(--ols-color-on-secondary-container);
+	--color-secondary-fixed: var(--ols-color-secondary-fixed);
+	--color-secondary-fixed-dim: var(--ols-color-secondary-fixed-dim);
+	--color-on-secondary-fixed: var(--ols-color-on-secondary-fixed);
+	--color-on-secondary-fixed-variant: var(--ols-color-on-secondary-fixed-variant);
+	--color-tertiary: var(--ols-color-tertiary);
+	--color-on-tertiary: var(--ols-color-on-tertiary);
+	--color-tertiary-container: var(--ols-color-tertiary-container);
+	--color-on-tertiary-container: var(--ols-color-on-tertiary-container);
+	--color-tertiary-fixed: var(--ols-color-tertiary-fixed);
+	--color-tertiary-fixed-dim: var(--ols-color-tertiary-fixed-dim);
+	--color-on-tertiary-fixed: var(--ols-color-on-tertiary-fixed);
+	--color-on-tertiary-fixed-variant: var(--ols-color-on-tertiary-fixed-variant);
+	--color-error: var(--ols-color-error);
+	--color-on-error: var(--ols-color-on-error);
+	--color-error-container: var(--ols-color-error-container);
+	--color-on-error-container: var(--ols-color-on-error-container);
+	--color-inverse-primary: var(--ols-color-inverse-primary);
+
+	--font-headline: var(--ols-font-headline);
+	--font-body: var(--ols-font-body);
+	--font-label: var(--ols-font-label);
+
+	--radius-sm: var(--ols-radius-sm);
+	--radius-lg: var(--ols-radius-md);
+	--radius-xl: var(--ols-radius-lg);
+	--radius-3xl: var(--ols-radius-pill);
+
+	--text-ols-label: var(--ols-text-label);
+	--text-ols-label--line-height: 1rem;
+	--text-ols-eyebrow: var(--ols-text-eyebrow);
+	--text-ols-eyebrow--line-height: 1rem;
+	--text-ols-caption: var(--ols-text-caption);
+	--text-ols-caption--line-height: 1.25rem;
+	--text-ols-card-title: var(--ols-text-card-title);
+	--text-ols-card-title--line-height: var(--ols-text-card-title-line-height);
+
+	--shadow-ols-nav: var(--ols-shadow-nav);
+	--shadow-ols-glass: var(--ols-shadow-glass);
+	--shadow-ols-glass-hover: var(--ols-shadow-glass-hover);
+	--shadow-ols-btn: var(--ols-shadow-btn-silver);
+	--shadow-ols-btn-hover: var(--ols-shadow-btn-silver-hover);
+	--shadow-ols-progress: var(--ols-shadow-progress-glow);
+}
+
+@layer components {
+	.grain-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: var(--ols-z-grain);
+		pointer-events: none;
+		opacity: 0.02;
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+	}
+
+	.glass-card {
+		background: var(--ols-bg-glass);
+		backdrop-filter: blur(var(--ols-blur-glass));
+		border: 1px solid var(--ols-border-glass);
+		box-shadow: var(--ols-shadow-glass);
+		transition: border-color var(--ols-duration-glass) ease, box-shadow var(--ols-duration-glass) ease,
+			transform 0.25s ease;
+	}
+
+	.glass-card:hover {
+		border-color: var(--ols-border-glass-hover);
+		box-shadow: var(--ols-shadow-glass-hover);
+		transform: translateY(-4px);
+	}
+
+	.material-symbols-outlined {
+		font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+	}
+
+	.status-orbit {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--ols-color-white);
+		box-shadow: 0 0 10px var(--ols-color-white);
+	}
+
+	.metallic-silver-gradient {
+		background: var(--ols-gradient-silver-bar);
+		background-size: 200% auto;
+		animation: silver-shine 5s linear infinite;
+	}
+
+	.metallic-text-shine {
+		background: var(--ols-gradient-silver-text);
+		background-size: 200% auto;
+		color: transparent;
+		-webkit-background-clip: text;
+		background-clip: text;
+		animation: silver-shine 8s linear infinite;
+	}
+
+	.btn-silver {
+		background: var(--ols-gradient-btn-silver);
+		color: var(--ols-color-background);
+		box-shadow: var(--ols-shadow-btn-silver);
+		transition: background var(--ols-duration-fast) var(--ols-ease-silver), box-shadow var(--ols-duration-fast) var(--ols-ease-silver),
+			transform var(--ols-duration-fast) var(--ols-ease-silver);
+	}
+
+	.btn-silver:hover {
+		background: var(--ols-gradient-btn-silver-hover);
+		box-shadow: var(--ols-shadow-btn-silver-hover);
+		transform: translateY(-2px) scale(1.02);
+	}
+
+	.btn-silver:active {
+		transform: translateY(0) scale(0.98);
+	}
+
+	/* Links de nav (sublinhado só com transform — scaleX) */
+	.ols-nav-link {
+		position: relative;
+		display: inline-block;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+	}
+
+	.ols-nav-link::after {
+		content: '';
+		position: absolute;
+		bottom: -2px;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: currentColor;
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.28s ease;
+	}
+
+	.ols-nav-link:hover::after {
+		transform: scaleX(1);
+	}
+
+	.ols-nav-link.nav-link-active {
+		color: #ffffff;
+	}
+
+	.ols-nav-link.nav-link-active::after {
+		transform: scaleX(1);
+	}
+
+	/* Bottom nav — mobile (Stitch) */
+	.bottom-nav-item {
+		display: flex;
+		min-width: 3.25rem;
+		min-height: 3.25rem;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.125rem;
+		border-radius: 0.5rem;
+		padding: 0.5rem;
+		font-family: var(--ols-font-body);
+		font-size: 0.625rem;
+		font-weight: 500;
+		line-height: 1.1;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: rgb(161 161 170);
+		transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+	}
+
+	.bottom-nav-item:not(.nav-link-active):hover {
+		background-color: rgb(255 255 255 / 0.05);
+	}
+
+	.bottom-nav-item:active {
+		transform: scale(0.97);
+	}
+
+	.bottom-nav-item.nav-link-active {
+		background-color: rgb(255 255 255 / 0.1);
+		color: #ffffff;
+	}
+
+	.bottom-nav-item .material-symbols-outlined {
+		margin-bottom: 0.125rem;
+		font-size: 22px;
+	}
+
+	.bottom-nav-item.nav-link-active .material-symbols-outlined {
+		font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+	}
+
+	/* Entrada suave do grain (só opacity) */
+	@media (prefers-reduced-motion: no-preference) {
+		.grain-overlay {
+			animation: ols-grain-fade 1s ease-out forwards;
+			opacity: 0;
+		}
+	}
+}
+
+@keyframes ols-grain-fade {
+	to {
+		opacity: 0.02;
+	}
+}
+
+@keyframes silver-shine {
+	to {
+		background-position: 200% center;
+	}
+}
+
+details summary::-webkit-details-marker {
+	display: none;
+}
+
+details summary {
+	list-style: none;
+}
+
+details[open] summary .expand-icon {
+	transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	summary.faq-summary-touch {
+		transition: transform 0.2s ease, opacity 0.2s ease;
+	}
+
+	summary.faq-summary-touch:hover {
+		transform: translateX(2px);
+	}
+}

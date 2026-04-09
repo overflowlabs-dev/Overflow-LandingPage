@@ -1,0 +1,84 @@
+---
+import ContactForm from '../contact/ContactForm/index.astro'
+import { getPublicEnv } from '../../lib/env-provider.mjs'
+
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const env = getPublicEnv(import.meta.env)
+const whatsappUrl = env.PUBLIC_WHATSAPP_URL
+const instagramUrl = env.PUBLIC_INSTAGRAM_URL
+---
+
+<section
+	id="contato"
+	data-animate-contact
+	class:list={[
+		'mx-auto max-w-screen-2xl border-b border-outline-variant/10 px-8 py-32',
+		className,
+	]}
+	aria-labelledby="contato-heading"
+>
+	<div class="flex flex-col gap-20 lg:flex-row">
+		<div data-contact-copy class="flex-1 space-y-8 opacity-0">
+			<h2
+				id="contato-heading"
+				class="font-headline text-4xl font-bold tracking-tighter text-white md:text-7xl"
+			>
+				Escale sua operação sem aumentar o Headcount
+			</h2>
+			<p
+				class="font-light text-lg text-secondary"
+			>
+				Automatize processos, reduza custos e aumente sua capacidade operacional com IA e sistemas sob medida.
+			</p>
+			<div class="max-w-sm space-y-4 border-t border-outline-variant/20 pt-8">
+				<div class="flex items-center justify-between text-sm" style="font-size: var(--ols-text-caption)">
+					<span class="font-label uppercase tracking-widest text-secondary/60">Eficiência Operacional</span>
+					<span class="text-white">+340%</span>
+				</div>
+				<div class="h-1 w-full bg-surface-container-highest">
+					<div class="metallic-silver-gradient h-full w-4/5 shadow-ols-progress"></div>
+				</div>
+			</div>
+		</div>
+		<div
+			data-contact-panel
+			class="glass-card flex-1 rounded-sm border border-outline-variant/10 bg-surface-container-low p-6 opacity-0 md:p-16"
+		>
+			<ContactForm />
+		</div>
+	</div>
+</section>
+
+<script>
+	import { inView, domReveal } from '../../lib/animate-dom'
+	import { prefersReducedMotion } from '../../lib/prefers-reduced-motion'
+
+	const contactRoot = document.querySelector('[data-animate-contact]')
+	if (contactRoot) {
+		if (prefersReducedMotion()) {
+			contactRoot.querySelectorAll('[data-contact-copy], [data-contact-panel]').forEach((el) => {
+				el.classList.remove('opacity-0')
+			})
+		} else {
+			inView(
+				contactRoot,
+				() => {
+					const copy = contactRoot.querySelector('[data-contact-copy]')
+					const panel = contactRoot.querySelector('[data-contact-panel]')
+					if (copy) {
+						domReveal(copy, { opacity: [0, 1], y: [28, 0] }, { duration: 0.58 })
+					}
+					if (panel) {
+						domReveal(panel, { opacity: [0, 1], y: [32, 0] }, { duration: 0.58, delay: 0.08 })
+					}
+				},
+				{ amount: 0.12, margin: '0px 0px -8% 0px' },
+			)
+		}
+	}
+</script>

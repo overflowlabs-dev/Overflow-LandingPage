@@ -1,0 +1,107 @@
+---
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const items = [
+	{
+		q: 'Como a automação via WhatsApp funciona?',
+		a: 'Integramos inteligência artificial diretamente ao WhatsApp. Isso permite que seu negócio tenha um atendente automático capaz de entender mensagens, agendar reuniões, responder dúvidas e fechar vendas 24/7, mantendo o tom de voz da sua marca.',
+	},
+	{
+		q: 'Quanto tempo leva para desenvolver uma landing page?',
+		a: 'Geralmente entre 7 e 15 dias úteis. Esse prazo inclui o design personalizado, os textos e a configuração técnica da página. O tempo pode variar dependendo da complexidade do projeto e da velocidade de retorno dos feedbacks.',
+	},
+	{
+		q: 'Vocês criam sistemas personalizados para qualquer nicho?',
+		a: 'Desenvolvemos ferramentas desktop simples e objetivas para automatizar tarefas do dia a dia do seu negócio — como controle interno, emissão de relatórios ou gestão de processos. Se a sua dor é clara, provavelmente conseguimos resolver.',
+	},
+	{
+		q: 'Os dados da minha empresa estão seguros com IA?',
+		a: 'Sim. Utilizamos APIs pagas dos modelos disponíveis na plataforma, onde os dados enviados não são usados para treinar modelos públicos, conforme as políticas oficiais de cada plataforma. Toda a comunicação é criptografada. Para empresas com exigências específicas de segurança, avaliamos soluções caso a caso.',
+	},
+	{
+		q: 'Como solicitar um orçamento?',
+		a: 'Basta preencher o formulário abaixo com seus dados e uma breve descrição do que você precisa. Nossa equipe entrará em contato em até 24 horas para agendar uma conversa e entender melhor o seu projeto.',
+	},
+]
+---
+
+<section
+	id="faq"
+	data-animate-faq
+	class:list={['mx-auto max-w-4xl px-8 py-32', className]}
+	aria-labelledby="faq-heading"
+>
+	<header data-faq-header class="mb-16 text-center opacity-0">
+		<h2
+			id="faq-heading"
+			class="font-headline text-4xl font-bold tracking-tighter text-white md:text-5xl"
+			style="font-size: var(--ols-text-section)"
+		>
+			Perguntas Frequentes
+		</h2>
+		<div class="mx-auto mt-6 h-px w-16 bg-white/40"></div>
+	</header>
+	<div class="space-y-4">
+		{
+			items.map((item) => (
+				<details data-faq-item class="group border-b border-outline-variant/30 opacity-0">
+					<summary class="faq-summary-touch flex cursor-pointer items-center justify-between rounded-t-sm px-4 py-6 transition-colors hover:bg-white/5 group-open:bg-white/5">
+						<span
+							class="font-headline font-medium tracking-tight text-white md:text-xl"
+							style="font-size: var(--ols-text-faq-question)"
+						>
+							{item.q}
+						</span>
+						<span
+							class="material-symbols-outlined expand-icon text-white transition-transform duration-300"
+							aria-hidden="true"
+						>
+							add
+						</span>
+					</summary>
+					<div
+						data-faq-answer
+						class="px-4 pb-8 font-light leading-relaxed text-secondary"
+					>
+						{item.a}
+					</div>
+				</details>
+			))
+		}
+	</div>
+</section>
+
+<script>
+	import { inView, domReveal, stagger } from '../../../lib/animate-dom'
+	import { prefersReducedMotion } from '../../../lib/prefers-reduced-motion'
+	import { setupFaqOpenMotion } from './faq-open-motion.client'
+
+	const root = document.querySelector('[data-animate-faq]')
+	if (root) {
+		if (prefersReducedMotion()) {
+			root.querySelectorAll('[data-faq-header], [data-faq-item]').forEach((el) => el.classList.remove('opacity-0'))
+		} else {
+			inView(
+				root,
+				() => {
+					const header = root.querySelector('[data-faq-header]')
+					const items = root.querySelectorAll('[data-faq-item]')
+					if (header) {
+						domReveal(header, { opacity: [0, 1], y: [20, 0] }, { duration: 0.55 })
+					}
+					domReveal(items, { opacity: [0, 1], y: [16, 0] }, {
+						duration: 0.5,
+						delay: stagger(0.07, { startDelay: 0.1 }),
+					})
+				},
+				{ amount: 0.1, margin: '0px 0px -8% 0px' },
+			)
+		}
+	}
+
+	setupFaqOpenMotion()
+</script>

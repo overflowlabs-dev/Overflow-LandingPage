@@ -1,0 +1,129 @@
+---
+import { getPublicEnv } from '../../../lib/env-provider.mjs'
+import Button from '../../ui/Button.astro'
+
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+const env = getPublicEnv(import.meta.env)
+const accessKey = env.PUBLIC_WEB3FORMS_ACCESS_KEY
+const formSubmitEndpoint = env.PUBLIC_FORM_ENDPOINT
+const nameMaxLength = 100
+const phoneMaxLength = 16
+const emailMaxLength = 254
+const messageMaxLength = 2000
+---
+
+<form id="contact-form" class:list={['space-y-10', className]} novalidate>
+	<input type="hidden" name="access_key" value={accessKey} />
+	<input type="hidden" name="form_submit_endpoint" value={formSubmitEndpoint} />
+	<input type="hidden" name="subject" value="Contato — Overflow Labs" />
+	<input
+		type="text"
+		name="_honey"
+		style="display:none"
+		tabindex="-1"
+		autocomplete="off"
+		aria-hidden="true"
+	/>
+	<div class="space-y-8">
+		<div class="relative">
+			<label
+				for="contact-name"
+				class="mb-2 block font-label uppercase text-secondary/60 text-ols-label tracking-[var(--ols-text-label-tracking)]"
+			>
+				Nome
+			</label>
+			<input
+				id="contact-name"
+				name="name"
+				type="text"
+				required
+				maxlength={nameMaxLength}
+				class="w-full border-0 border-b border-outline-variant bg-transparent px-0 py-3 font-body text-white placeholder:text-surface-container-highest focus:border-white focus:ring-0 focus:outline-none"
+				placeholder="Como devemos te chamar?"
+				autocomplete="name"
+			/>
+		</div>
+		<div class="relative">
+			<label
+				for="contact-phone"
+				class="mb-2 block font-label uppercase text-secondary/60 text-ols-label tracking-[var(--ols-text-label-tracking)]"
+			>
+				Telefone (WhatsApp)
+			</label>
+			<input
+				id="contact-phone"
+				name="phone"
+				type="tel"
+				required
+				maxlength={phoneMaxLength}
+				inputmode="numeric"
+				class="w-full border-0 border-b border-outline-variant bg-transparent px-0 py-3 font-body text-white placeholder:text-surface-container-highest focus:border-white focus:ring-0 focus:outline-none"
+				placeholder="(41) 9 9999-9999"
+				autocomplete="tel-national"
+			/>
+		</div>
+		<div class="relative">
+			<label
+				for="contact-email"
+				class="mb-2 block font-label uppercase text-secondary/60 text-ols-label tracking-[var(--ols-text-label-tracking)]"
+			>
+				E-mail
+			</label>
+			<input
+				id="contact-email"
+				name="email"
+				type="email"
+				required
+				maxlength={emailMaxLength}
+				class="w-full border-0 border-b border-outline-variant bg-transparent px-0 py-3 font-body text-white placeholder:text-surface-container-highest focus:border-white focus:ring-0 focus:outline-none"
+				placeholder="seu@email.com"
+				autocomplete="email"
+			/>
+		</div>
+		<div class="relative">
+			<label
+				for="contact-message"
+				class="mb-2 block font-label uppercase text-secondary/60 text-ols-label tracking-[var(--ols-text-label-tracking)]"
+			>
+				O que você precisa desenvolver ou automatizar?
+			</label>
+			<textarea
+				id="contact-message"
+				name="message"
+				required
+				maxlength={messageMaxLength}
+				rows="3"
+				class="w-full resize-none border-0 border-b border-outline-variant bg-transparent px-0 py-3 font-body text-white placeholder:text-surface-container-highest focus:border-white focus:ring-0 focus:outline-none"
+				placeholder="Descreva a sua ideia ou projeto"
+			></textarea>
+		</div>
+	</div>
+	<div class="flex justify-center">
+		<div class="h-captcha" id="h-captcha-response" data-captcha="true" data-theme="dark" />
+	</div>
+	<Button type="submit" class="w-full py-5 md:text-lg">
+		Receber diagnóstico gratuito
+	</Button>
+	<p id="form-status" class="hidden text-center text-sm text-secondary" role="status" aria-live="polite"></p>
+</form>
+
+
+<script src="https://web3forms.com/client/script.js" async defer></script>
+<script>
+	import { initContactForm } from './contact-form.client'
+
+	const form = document.getElementById('contact-form')
+	if (form instanceof HTMLFormElement) {
+		const endpointInput = form.querySelector<HTMLInputElement>('input[name="form_submit_endpoint"]')
+		const endpoint = endpointInput?.value?.trim() ?? ''
+		initContactForm(form, {
+			formSubmitEndpoint: endpoint,
+			resetCaptcha: () =>
+				(window as Window & { hcaptcha?: { reset?: () => void } }).hcaptcha?.reset?.(),
+		})
+	}
+</script>

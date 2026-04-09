@@ -1,0 +1,85 @@
+---
+import { getPublicEnv } from '../../lib/env-provider.mjs'
+import whatsappIconUrl from '../../assets/icons/whatsappIcon.svg?url'
+import instagramIconUrl from '../../assets/icons/InstagramIcon.svg?url'
+
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const env = getPublicEnv(import.meta.env)
+const whatsappUrl = env.PUBLIC_WHATSAPP_URL
+const instagramUrl = env.PUBLIC_INSTAGRAM_URL
+---
+
+<aside
+	class:list={[
+		'pointer-events-none fixed z-[60] flex flex-col gap-3',
+		'right-[max(1rem,env(safe-area-inset-right,0px))]',
+		'bottom-[calc(5.75rem+max(0.5rem,env(safe-area-inset-bottom,0px)))] md:bottom-[calc(4rem+max(1rem,env(safe-area-inset-bottom,0px)))]',
+		className,
+	]}
+	aria-label="Atalhos para WhatsApp e Instagram"
+>
+	<a
+		class="ols-floating-social-link pointer-events-auto flex size-14 items-center justify-center rounded-full bg-black text-white shadow-lg ring-1 ring-white/15 transition-[transform,opacity] duration-200 ease-out hover:scale-110 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+		href={whatsappUrl}
+		target="_blank"
+		rel="noopener noreferrer"
+		aria-label="Abrir conversa no WhatsApp"
+	>
+		<img
+			src={whatsappIconUrl}
+			alt=""
+			width="24"
+			height="24"
+			class="size-[26px] shrink-0"
+			aria-hidden="true"
+		/>
+	</a>
+	<a
+		class="ols-floating-social-link ols-floating-social-link--delay pointer-events-auto flex size-14 items-center justify-center rounded-full bg-black text-white shadow-lg ring-1 ring-white/15 transition-[transform,opacity] duration-200 ease-out hover:scale-110 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+		href={instagramUrl}
+		target="_blank"
+		rel="noopener noreferrer"
+		aria-label="Abrir perfil no Instagram"
+	>
+		<img
+			src={instagramIconUrl}
+			alt=""
+			width="24"
+			height="24"
+			class="size-[26px] shrink-0"
+			aria-hidden="true"
+		/>
+	</a>
+</aside>
+
+<style>
+	@keyframes ols-floating-social-entrada {
+		from {
+			opacity: 0;
+			transform: translateY(12px) scale(0.92);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	.ols-floating-social-link {
+		animation: ols-floating-social-entrada 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+	}
+
+	.ols-floating-social-link--delay {
+		animation-delay: 90ms;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ols-floating-social-link {
+			animation: none;
+		}
+	}
+</style>

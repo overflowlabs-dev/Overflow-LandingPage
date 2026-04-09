@@ -1,0 +1,20 @@
+---
+interface Props {
+	iconUrl: string
+	label: string
+	class?: string
+}
+
+const { iconUrl, label, class: className = '' } = Astro.props
+---
+
+<article
+	class:list={[
+		'flex min-h-28 flex-col items-center justify-center gap-3 rounded-sm border border-white/20 bg-white/[0.03] px-5 py-5',
+		'font-label text-xs uppercase tracking-[0.2em] text-white',
+		className,
+	]}
+>
+	<img src={iconUrl} alt="" class="size-5 shrink-0 brightness-0 invert opacity-90" aria-hidden="true" />
+	<span>{label}</span>
+</article>

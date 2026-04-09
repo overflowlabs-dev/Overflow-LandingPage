@@ -1,0 +1,50 @@
+---
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const items = [
+	{ href: '#home', label: 'Home', icon: 'home' },
+	{ href: '#solucoes', label: 'Soluções', icon: 'grid_view' },
+	{ href: '#sobre', label: 'Sobre', icon: 'info' },
+	{ href: '#protocolo', label: 'Protocolo', icon: 'layers' },
+	{ href: '#faq', label: 'FAQ', icon: 'help_outline' },
+	{ href: '#contato', label: 'Contato', icon: 'mail' },
+] as const
+---
+
+<nav
+	class:list={[
+		'fixed bottom-0 left-0 right-0 z-40 md:hidden',
+		className,
+	]}
+	style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px))"
+	aria-label="Navegação inferior"
+>
+	<div
+		class="flex items-stretch justify-around gap-1 border-t border-white/5 bg-neutral-950/90 px-2 pt-2 pb-2 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] backdrop-blur-lg min-[480px]:px-4"
+	>
+		{
+			items.map((item) => (
+				<a
+					data-nav-section-link
+					class="bottom-nav-item flex-1"
+					href={item.href}
+				>
+					<span class="material-symbols-outlined" aria-hidden="true">
+						{item.icon}
+					</span>
+					<span>{item.label}</span>
+				</a>
+			))
+		}
+	</div>
+</nav>
+
+<script>
+	import { setupGlobalNavActive } from '../../lib/nav-active'
+
+	setupGlobalNavActive()
+</script>

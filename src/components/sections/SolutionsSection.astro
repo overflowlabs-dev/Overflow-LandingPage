@@ -1,0 +1,145 @@
+---
+import { Image } from 'astro:assets'
+import GlassFeatureCard from '../ui/GlassFeatureCard.astro'
+import solutionChat from '../../assets/images/solution-chat.png'
+import solutionSystems from '../../assets/images/solution-systems.png'
+import solutionLanding from '../../assets/images/solution-landing.png'
+
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+---
+
+<section
+	id="solucoes"
+	data-animate-solutions
+	class:list={['mx-auto max-w-screen-2xl px-8 py-32', className]}
+	aria-labelledby="solucoes-heading"
+>
+	<header data-solutions-header class="mb-24 space-y-4 opacity-0">
+		<h2
+			id="solucoes-heading"
+			class="font-headline text-4xl font-bold tracking-tighter text-white md:text-5xl"
+			style="font-size: var(--ols-text-section); line-height: var(--ols-text-section-line-height)"
+		>
+			Soluções de Escala
+		</h2>
+		<div class="h-px w-24 bg-white/40"></div>
+		<p class="max-w-2xl font-light text-secondary" style="font-size: var(--ols-text-body-lg)">
+			Automação no WhatsApp, sistemas sob medida e landing pages focadas em conversão — tudo alinhado ao que
+			seu negócio precisa para crescer.
+		</p>
+		
+	</header>
+	<ul class="grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-3" role="list">
+		<li data-solution-card class="opacity-0">
+			<GlassFeatureCard variant="with-media" class="h-full">
+				<div class="space-y-6">
+					<span
+						class="material-symbols-outlined text-4xl text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+						aria-hidden="true">chat_bubble</span
+					>
+					<h3 class="font-headline text-ols-card-title font-bold uppercase tracking-tight text-white">
+						Conversas Inteligentes
+					</h3>
+					<p class="font-light text-secondary">
+						Atenda clientes 24h no WhatsApp sem aumentar equipe.
+					</p>
+				</div>
+				<div
+					class="relative mt-8 h-48 overflow-hidden rounded-t-xl border-x border-t border-outline-variant/30 bg-surface-container-low"
+				>
+					<Image
+						src={solutionChat}
+						alt="Ilustração de fluxo com IA processando conversas e integração via WhatsApp"
+						class="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.04] group-hover:opacity-95"
+						height={512}
+					/>
+				</div>
+			</GlassFeatureCard>
+		</li>
+		<li data-solution-card class="opacity-0">
+			<GlassFeatureCard variant="with-media" class="h-full">
+				<div class="space-y-6">
+					<span
+						class="material-symbols-outlined text-4xl text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+						aria-hidden="true">settings_input_component</span
+					>
+					<h3 class="font-headline text-ols-card-title font-bold uppercase tracking-tight text-white">
+						Sistemas Personalizados
+					</h3>
+					<p class="font-light text-secondary">
+						Elimine tarefas manuais e escale sua operação.
+					</p>
+				</div>
+				<div
+					class="relative mt-8 h-48 overflow-hidden rounded-t-xl border-x border-t border-outline-variant/30 bg-surface-container-low"
+				>
+					<Image
+						src={solutionSystems}
+						alt="Ilustração de painéis, dados e configuração de sistemas sob medida"
+						class="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.04] group-hover:opacity-95"
+											height={512}
+					/>
+				</div>
+			</GlassFeatureCard>
+		</li>
+		<li data-solution-card class="opacity-0">
+			<GlassFeatureCard variant="with-media" class="h-full">
+				<div class="space-y-6">
+					<span
+						class="material-symbols-outlined text-4xl text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+						aria-hidden="true">web</span
+					>
+					<h3 class="font-headline text-ols-card-title font-bold uppercase tracking-tight text-white">
+						Landing Pages de Alta Conversão
+					</h3>
+					<p class="font-light text-secondary">
+						Transforme visitantes em clientes com páginas otimizadas.
+					</p>
+				</div>
+				<div
+					class="relative mt-8 h-48 overflow-hidden rounded-t-xl border-x border-t border-outline-variant/30 bg-surface-container-low"
+				>
+					<Image
+						src={solutionLanding}
+						alt="Ilustração de landing page com CTA, funil de conversão e SEO"
+						class="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.04] group-hover:opacity-95"
+						
+						height={512}
+					/>
+				</div>
+			</GlassFeatureCard>
+		</li>
+	</ul>
+</section>
+
+<script>
+	import { inView, domReveal, stagger } from '../../lib/animate-dom'
+	import { prefersReducedMotion } from '../../lib/prefers-reduced-motion'
+
+	const root = document.querySelector('[data-animate-solutions]')
+	if (root) {
+		if (prefersReducedMotion()) {
+			root.querySelectorAll('[data-solutions-header], [data-solution-card]').forEach((el) => {
+				el.classList.remove('opacity-0')
+			})
+		} else {
+			inView(
+				root,
+				() => {
+					const header = root.querySelector('[data-solutions-header]')
+					const cards = root.querySelectorAll('[data-solution-card]')
+					const sequence = [header, ...cards].filter(Boolean) as Element[]
+					domReveal(sequence, { opacity: [0, 1], y: [32, 0] }, {
+						duration: 0.58,
+						delay: stagger(0.11),
+					})
+				},
+				{ amount: 0.12, margin: '0px 0px -8% 0px' },
+			)
+		}
+	}
+</script>

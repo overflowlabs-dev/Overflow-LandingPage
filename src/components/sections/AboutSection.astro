@@ -1,0 +1,128 @@
+---
+import GlassFeatureCard from '../ui/GlassFeatureCard.astro'
+
+interface Props {
+	class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const pillars = [
+	{
+		icon: 'payments',
+		title: 'Foco em ROI real',
+		body: 'Soluções pensadas para gerar retorno mensurável no seu negócio.',
+	},
+	{
+		icon: 'alt_route',
+		title: 'Arquitetura escalável',
+		body: 'Sistemas preparados para crescer junto com sua operação.',
+	},
+	{
+		icon: 'memory',
+		title: 'Automação inteligente',
+		body: 'Elimine tarefas manuais e aumente produtividade com IA.',
+	},
+	{
+		icon: 'hub',
+		title: 'Integrações sob medida',
+		body: 'Conectamos sistemas e ferramentas essenciais do seu negócio.',
+	},
+] as const
+---
+
+<section
+	id="sobre"
+	data-animate-about
+	class:list={['mx-auto max-w-screen-2xl px-8 py-32', className]}
+	aria-labelledby="sobre-heading"
+>
+	<div class="flex flex-col gap-20">
+		<div class="grid grid-cols-1 gap-1 md:gap-20 lg:grid-cols-2">
+			<div data-about-copy class="space-y-10 opacity-0">
+				<div class="space-y-6">
+					<p class="font-label text-xs uppercase tracking-[0.3em] text-secondary">A Diferença Overflow</p>
+					<h2
+						id="sobre-heading"
+						class="font-headline font-bold leading-[1.1] tracking-tighter text-white"
+						style="font-size: var(--ols-text-section-lg); line-height: var(--ols-text-section-line-height)"
+					>
+						Por que empresas escolhem a <br />
+						<span class="metallic-text-shine">Overflow Labs.</span>
+					</h2>
+					<p
+						class="max-w-xl font-light text-lg leading-relaxed text-secondary"
+					>
+						Desenvolvemos soluções que aumentam eficiência, reduzem custos operacionais e escalam negócios
+						com tecnologia sob medida.
+					</p>
+				</div>
+				<a
+					href="#contato"
+					class="btn-silver hidden rounded-sm px-10 py-5 font-headline text-lg font-bold tracking-tight lg:inline-flex"
+				>
+					Quero automatizar minha operação
+				</a>
+			</div>
+			<ul class="grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2" role="list">
+				{
+					pillars.map((item) => (
+						<li data-about-card class="opacity-0">
+							<GlassFeatureCard variant="compact" class="h-full">
+								<div
+									class="flex size-12 items-center justify-center rounded-sm border border-white/10 bg-white/5"
+								>
+									<span class="material-symbols-outlined text-2xl text-white" aria-hidden="true">
+										{item.icon}
+									</span>
+								</div>
+								<div class="space-y-2">
+									<h3 class="font-headline text-lg font-bold uppercase tracking-tight text-white">
+										{item.title}
+									</h3>
+									<p class="text-sm font-light leading-relaxed text-secondary">{item.body}</p>
+								</div>
+							</GlassFeatureCard>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+		<a
+			href="#contato"
+			data-about-cta-mobile
+			class="btn-silver w-full rounded-sm py-5 text-center font-headline text-lg font-bold tracking-tight opacity-0 lg:hidden"
+		>
+			Quero automatizar minha operação
+		</a>
+	</div>
+</section>
+
+<script>
+	import { inView, domReveal, stagger } from '../../lib/animate-dom'
+	import { prefersReducedMotion } from '../../lib/prefers-reduced-motion'
+
+	const root = document.querySelector('[data-animate-about]')
+	if (root) {
+		if (prefersReducedMotion()) {
+			root
+				.querySelectorAll('[data-about-copy], [data-about-card], [data-about-cta-mobile]')
+				.forEach((el) => el.classList.remove('opacity-0'))
+		} else {
+			inView(
+				root,
+				() => {
+					const copy = root.querySelector('[data-about-copy]')
+					const cards = root.querySelectorAll('[data-about-card]')
+					const mobileCta = root.querySelector('[data-about-cta-mobile]')
+					const sequence = [copy, ...cards, mobileCta].filter(Boolean) as Element[]
+					domReveal(sequence, { opacity: [0, 1], y: [28, 0] }, {
+						duration: 0.55,
+						delay: stagger(0.09),
+					})
+				},
+				{ amount: 0.12, margin: '0px 0px -8% 0px' },
+			)
+		}
+	}
+</script>
