@@ -1,70 +1,70 @@
 ---
-import '../styles/global.css'
-import { getPublicEnv } from '../lib/env-provider.mjs'
-import interLatinWoff2 from '../assets/fonts/inter-latin.woff2?url'
-import spaceGroteskLatinWoff2 from '../assets/fonts/space-grotesk-latin.woff2?url'
+import "../styles/global.css";
+import { getPublicEnv } from "../lib/env-provider.mjs";
+import interLatinWoff2 from "../assets/fonts/inter-latin.woff2?url";
+import spaceGroteskLatinWoff2 from "../assets/fonts/space-grotesk-latin.woff2?url";
 
 interface Props {
-    title: string
-    description: string
-    ogImage?: string
-    canonical?: string
+    title: string;
+    description: string;
+    ogImage?: string;
+    canonical?: string;
 }
 
 const {
     title,
     description,
-    ogImage = '/og-image.png',
+    ogImage = "/og-image.png",
     canonical = Astro.url.href,
-} = Astro.props
+} = Astro.props;
 
-const site = Astro.site ?? new URL('https://overflowlabs.com.br')
-const siteName = 'Overflow Labs'
-const ogImageAbsoluto = new URL(ogImage, site).href
-const logoAbsoluto = new URL('/logo.svg', site).href
+const site = Astro.site ?? new URL("https://overflowlabs.com.br");
+const siteName = "Overflow Labs";
+const ogImageAbsoluto = new URL(ogImage, site).href;
+const logoAbsoluto = new URL("/logo.svg", site).href;
 
-const env = getPublicEnv(import.meta.env)
+const env = getPublicEnv(import.meta.env);
 const sameAs = [env.PUBLIC_INSTAGRAM_URL, env.PUBLIC_WHATSAPP_URL].filter(
-    (u): u is string => typeof u === 'string' && /^https:\/\//i.test(u.trim()),
-)
+    (u): u is string => typeof u === "string" && /^https:\/\//i.test(u.trim()),
+);
 
 const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareCompany',
+    "@context": "https://schema.org",
+    "@type": "SoftwareCompany",
     "@id": `${site.href}#organization`,
     image: [ogImageAbsoluto, logoAbsoluto],
     name: siteName,
     url: site.href,
     logo: {
-        '@type': 'ImageObject',
+        "@type": "ImageObject",
         url: logoAbsoluto,
-        width: '764',
-        height: '404'
+        width: "764",
+        height: "404",
     },
     description,
     address: {
-        '@type': 'PostalAddress',
-        addressCountry: 'BR',
-        addressLocality: 'Ponta Grossa',
-        addressRegion: 'PR'
+        "@type": "PostalAddress",
+        addressCountry: "BR",
+        addressLocality: "Ponta Grossa",
+        addressRegion: "PR",
     },
     contactPoint: [
         {
-            '@type': 'ContactPoint',
-            contactType: 'customer support',
-            availableLanguage: ['Portuguese'],
-            areaServed: 'BR'
+            "@type": "ContactPoint",
+            contactType: "customer support",
+            availableLanguage: ["Portuguese"],
+            areaServed: "BR",
         },
         {
-            '@type': 'ContactPoint',
-            contactType: 'sales',
+            "@type": "ContactPoint",
+            contactType: "sales",
             url: env.PUBLIC_WHATSAPP_URL,
         },
     ],
-    sameAs
-}
+    sameAs,
+};
 
-const jsonLdScript = JSON.stringify(jsonLd).replace(/</g, '\\u003c')
+const jsonLdScript = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
 ---
 
 <!doctype html>
@@ -81,10 +81,13 @@ const jsonLdScript = JSON.stringify(jsonLd).replace(/</g, '\\u003c')
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonical} />
-        <meta property="og:site_name" content={siteName} /> <meta property="og:title" content={title} />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImageAbsoluto} />
-        <meta property="og:image:width" content="1200" /> <meta property="og:image:height" content="630" />  <meta property="og:locale" content="pt_BR" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="pt_BR" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
@@ -92,19 +95,85 @@ const jsonLdScript = JSON.stringify(jsonLd).replace(/</g, '\\u003c')
         <meta name="twitter:image" content={ogImageAbsoluto} />
 
         <meta name="theme-color" content="#000000" />
-        <link rel="icon" href="/favicon.ico">
-        <link rel="icon" href="/logo.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
         <link rel="manifest" href="/site.webmanifest" />
 
-        <link rel="preload" href={interLatinWoff2} as="font" type="font/woff2" crossorigin="anonymous" />
-        <link rel="preload" href={spaceGroteskLatinWoff2} as="font" type="font/woff2" crossorigin="anonymous" />
+        <link
+            rel="preload"
+            href={interLatinWoff2}
+            as="font"
+            type="font/woff2"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            href={spaceGroteskLatinWoff2}
+            as="font"
+            type="font/woff2"
+            crossorigin="anonymous"
+        />
 
         <script type="application/ld+json" set:html={jsonLdScript} />
+
+        <!-- Meta Pixel Code -->
+        <script>
+            !(function (f, b, e, v, n, t, s) {
+                if (f.fbq) return;
+                n = f.fbq = function () {
+                    n.callMethod
+                        ? n.callMethod.apply(n, arguments)
+                        : n.queue.push(arguments);
+                };
+                if (!f._fbq) f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = "2.0";
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s);
+            })(
+                window,
+                document,
+                "script",
+                "https://connect.facebook.net/en_US/fbevents.js",
+            );
+            fbq("init", "944592981671895");
+            fbq("track", "PageView");
+        </script>
+        <noscript
+            ><img
+                height="1"
+                width="1"
+                style="display:none"
+                src="https://www.facebook.com/tr?id=944592981671895&ev=PageView&noscript=1"
+            /></noscript
+        >
+        <!-- End Meta Pixel Code -->
     </head>
-    <body class="bg-background text-on-surface font-body overflow-x-hidden antialiased">
+    <body
+        class="bg-background text-on-surface font-body overflow-x-hidden antialiased"
+    >
         <slot />
     </body>
 </html>
